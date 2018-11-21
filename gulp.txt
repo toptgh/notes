@@ -1,0 +1,150 @@
+gulp中文文档：https://www.gulpjs.com.cn/docs/
+gulp英文文档：https://github.com/gulpjs/gulp/blob/v3.9.1/docs/API.md
+
+gulp安装全局 npm i -g
+新建文件夹 打开文件夹下 打开cmd  输入npm init 会在当前文件生成一个JSON文件
+安装gulp开发环境  npm i gulp -D
+
+安装插件 npm i gulp-connect gulp-uglify gulp-html-minify gulp-imagemin gulp-autoprefixer -D
+
+
+gulp-git
+先克隆本地
+创建分支：  git branch 分支名称；
+切换分支:	git checkout 分支名称；
+gulp初始化:  npm init
+当前新建一个项目文件夹，把项目文件放进去 gulp文件不用
+git add .
+git commit -m '备注'
+新建一个gulpfile.js
+下载安装插件
+写gulpfile.js
+本地服务器测试
+排除不需要上传的文件   新建  .gitignore 文件 写上node_modules/和dist/
+git add .
+git commit -m '备注' 
+切换主分支： git checkout master
+合并分支： git merge 分支名称
+上传：git push origin master
+为了保证本地仓库代码是最新的 提交远程仓库前先把远程仓库克隆下来，然后把修改的文件拉过去，再提交远程
+
+
+// gulp 压缩js  压缩html 压缩css,  把es6转成es5 等等...
+        // nodejs可以读写文件.
+        
+        // npm 包管理工具
+        // npm install 包名称  // 安装 包
+        // npm uninstall 包名称 // 卸载安装包
+        // npm install 包名称@1.0.0 // 安装指定版本的包
+        // npm update 包名称
+
+        // install 可以简写 i
+
+        // 安装包分为两种
+        // 1. 开发环境使用线上不需要
+        // 安装时,需要在后面 添加 --save-dev -D
+        // 2. 线上开发需要依赖
+        //  --save  -S
+
+        // 安装全局指令  -g
+
+
+        // package.json 文件
+        // 包管理文件, 可以通过该文件,了解该项目安装了哪些依赖包
+        // 在别的环境使用该项目,通过package.json , npm  intall 一次性可以把所有的安装包安装完成
+
+
+        // npm init  把当前文件夹变为npm包
+
+
+        // cnpm 是淘宝镜像文件, 因为npm服务器在国外, 国内去该服务器下载文件很很慢,所以可以通过淘宝镜像去下载文件
+        // cnpm提前报npm上面的安装包克隆到自己的服务器,提供别人下载
+
+// gulp +  任务名称, 如果不写, 默认执行default任务
+// gulp 一共有4个api
+//  src: 超找文件
+//  dest: 输出文件
+//  watch: 监听文件
+//  task: 创建一个任务
+
+
+1.安装
+      先安装node.js环境
+      通过node -v 查看node安装版本
+      安装gulp:
+          1.全局安装：npm install gulp -g
+          2.创建gulpDemo项目目录 cd到目录下
+          3.在目录下安装gulp:npm install gulp --save-dev
+          4.配置package.json文件：npm init -y
+   2.什么是gulp
+      gulp:前端自动化工具
+      作用（插件功能）：
+          自动化压缩js文件、css文件
+          自动压缩图片文件
+          自动合并文件
+   3.gulp中的方法
+      task()布置任务
+          有三个参数：
+          第一个参数：任务名称 默认任务 default
+          第二个参数：该任务依赖的其它任务 是一个数组（可选）
+          第三个参数：任务回调函数（任务执行）
+          
+          执行其它任务的方式有两种
+             第一种：通过default任务依赖执行
+             第二种：按gulp任务名称执行
+      src()源文件路径（参数可以是一个数组）
+      dest()目标文件路径 dest参数中的文件夹名称可以自动创建
+      pipe()管道方法， 表示输送， 也就是“下一步”
+      watch()监听
+          两个参数：
+             第一个参数：监听文件的路径
+             第二个参数：监听的任务名称  数组
+
+
+
+2.布置任务
+
+   执行命令：gulp
+   结果：No gulpfile found 没有找到gulpfile这个文件
+      说明bulp所有任务都将在gulpfile文件下执
+行
+   创建gulpfile.js文件(必需是这个文件)
+   
+   gulpfile.js中编写代码
+      1.引入glup模块
+          var gulp = require("gulp");
+      2.在gulp下布置多个任务task();
+         gulp.task("default",function(){
+             console.log("default任务执行了");
+          })
+          gulp.task("say",function(){
+             console.log("say任务执行了");
+          })
+      3.启动执行：
+          执行默认：gulp
+          执行其它任务：gulp 任务名
+          多个任务一起执行 ：在默认任务的第二个参数以数组的方式把其它需要执行的任务依赖注入进去
+             gulp.task("default",["say","dance"...],function(){
+                console.log("default任务执行了");
+             })
+             执行时执行默认任务即可：gulp
+   
+      4.布置一个任务：将src目录下的index.html文件复制到desth目录下
+          src()源文件路径
+          pipe()管道输送
+          dest()目标目录
+         gulp.src("src/index.html").pipe( gulp.dest(目标目录) );
+      5.布置一个任务：将lib目录下的所有js文件复制到js目录下
+          gulp.src("lib/*.js").pipe( gulp.dest("js") );
+      6.src参数可以是一个数组
+          布置一个任务：将src下的css文件和lib下的css文件复制到dest目录下
+         gulp.src(["src/*.css","lib/*.css"]).pipe( gulp.dest("dest") );
+   
+      7.gulp.src("lib/*")与gulp.src("lib/*/**的区别")
+          lib/*：代表src下的所有一级目录的文件,不包含二级目录文件
+          lib/**：代表src下的所有文件，包含所有二级目录文件和多级目录文件
+          lib/*/**:代表src下的二级目录下的所有文件
+   
+      8.gulp.watch()监听
+         gulp.watch("src/index.hmtl",["copyHtml"]);
+         ctrl+c结束监听 

@@ -1,0 +1,664 @@
+数据类型6种
+	string, number, null的数据类型为object(历史原因),  undefined的数据类型还是它， boolean, object
+ 命名规范
+        1. 必须以$_英文字母开头， $_英文字母和数字
+        2. 不可以使用关键字或者保留字
+
+// 布尔类型的转换Boolean()
+        	数字转为布尔类型，除了0全为真
+	字符串转为布尔类型，在非空字符串都为真。
+	null, undefined 转化为布尔都为假
+// 其他类型转为字符串xxx.toString()：
+	数字，布尔类型可以转换为字符串类型。其他报错。
+//转换为数字类型 1. Number()   2. parseInt()  3. parseFloat()
+       	 Number 只能转换数字字符串。数字字符串： 字符串的内容为纯数字。空字符串、空格、null转换为0；undefined、(11aa)是NaN
+	 parseInt， parseFloat: 字符串必须以数字开头，找到第一个非数字结束。 前者会返回一个整数，向下取整。后者会返回一个浮点数。
+
+ // 1. 10进制准换位其他进制
+        	var  a= 100;
+       	console.log(a.toString(8));
+	通过xxx..toString() 括号内传入数字，想转换为几进制，就写数字几， 返回结果为字符串
+ // 2. 其他进制转换10进制
+	 var a = 1010;
+     	 console.log(parseInt(a, 8));
+	通过parseInt();写一个变量，然后逗号，最后变量是多少进制就写多少进制
+
+// 算术运算符：+ - * / %
+// 赋值运算符：= += *= -= /= %=
+// 逻辑运算符： ! && ||
+	 && 有一假即返回， 如果都为真，返回最后一个结果
+	 || 有一真即返回，如果都为假，返回最后一个结果
+// 一元运算符 ++ --
+        	++前置: 在本次运算中，变量执行+1操作
+	后置++： 下次使用时，变量进行+1操作
+// 三元运算符? :
+      	  var c = 10 == 10 ? '123' : '456';
+// 关系运算符：==,!=, !==(等于，直接比较值), ===(恒等于,先比较数据类型，在比较值。), >, <, <=, >=
+	
+//隐式转换
+	+ : 1.如果有一者为字符串，另外一个会进行隐士转换为字符串（相当于字符串拼接）
+            	      2. 如果没有字符串，其他类型隐士转换为数字类型的（不包含对象） 
+	 - * / % : 默认将元素进行隐士转换，转换为数字。
+	== === != !== > < >= <=（关系运算符）
+        	=== 恒等于不会进行隐士转换
+	1. 如果有数字的话， 默认都转化为数字
+        	 2. 如果有布尔类型， 先把布尔类型转化为数字
+        	 (不适用在== 中的null， 和undefined);
+        	 结论： null 跟 undefined 两者互相相等， 而且等于本身， 其他的值都不相等。
+ 掌握NaN的含义
+           答：
+                1.不是一个数字。 
+                2.是number类型的
+                3. NaN不等于任何值，包括本身。
+思考isNaN()的使用方法？
+            答： 1.判断括号内的内容是否为NaN,如果是返回true，如果不是返回false。
+                2. 括号内的内容会默认进行隐士转换，转换为number.
+
+toFixed()保留小数，括号内传入一个数字，代表保留的位数。返回一个字符串。
+
+提示框（alert）， 只有一个确定按钮， 没有返回值
+对话框(prompt)
+         点击确定：返回输入的内容， 且是字符串类型的
+         点击取消：返回null
+确认框(confirm)
+        点击确定： 返回true
+        点击取消： 返回false
+缺点： 	1. 不可以修改样式
+	2. 阻塞进程
+
+返回一个min - max 的随机整数
+var d = min + Math.random() * (max - min);
+// debugger // 打断点
+
+switch: 匹配值的时候，是恒等于。
+default：如果没有值可以匹配的话，默认执行default后面的代码（相当于if语句中的else）
+case穿透：如果条件满足，后面的代码都会执行，直到遇见break，才会终止
+
+// 获取绝对值:Math.abs
+// 向下取整:Math.floor
+// 向上取整:Math.ceil
+// 四舍五入:Math.round
+//获取随机数:Math.random(); 
+
+// 循环：同一件事情重复去做
+// 死循环：同一件事情不停的做， 没有出口(浏览器崩溃)；
+// continue: 跳出当前这一步循环，后面的继续
+// break: 终止当前这个循环， 其他的循环不在继续。
+
+
+/*
+ // 无论条件是否满足，至少执行一次
+            do {
+
+            } while(条件)
+ */
+
+1.声明变量有哪些规则？
+	1. 必须以$_英文字母开头
+	2. 组成部分只能是$_英文字母和数字
+	3. 不能使用关键字和保留字
+2.强制转换有哪几种？
+	1. 转字符串： xxx.toString() 注意： null和undefined 不可以强制转换。
+	2. 转数字： Number(), parseInt(), parseFloat()
+	3. 转布尔类型： Boolean()
+3. Number(), parseInt(), parseFloat()转字符串时三者的区别？
+	1. Number()只能转数字字符串，整数浮点数都可以，其他的不行
+	2. parseInt(), parseFloat()可以转以数字开头的字符串，到第一个不为数字的字符结束
+	3. parseInt()只能转整型, parseFloat()可以是浮点数
+3. 浏览器三个弹窗
+	1.alert()
+	2. prompt()
+	3. confirm()
+4. switch语句中的break关键字有什么作用？
+	1.break会终止switch语句。
+	2.如果不加break，可能会造成case穿透：即只要有一个case满足条件，后面的代码都会执行，无论条件是否成立
+5. 循环体中的break有什么作用？continue有什么作用？
+	break: 终止当前循环体，所有循环都将停止
+	continue： 跳过这一步循环，其他循环继续。
+
+  // 函数 ： 把你的代码进行封装，默认是不执行，使用时调用即可。
+  // 优势： 1. 方便维护代码，一个函数多个地方使用
+	//  2. 使用者，不需要关心函数的实现过程，只需要考虑结果
+// 声明方式
+            // function 标识符 () {代码块}
+            // var 标识符 = function() {}
+            // function 也是一种数据类型，它属于对象，但是是一种特殊的对象。
+ 	// 【注意】：用typeof 检测数据类型，返回的是'function';
+
+如何获取函数传入的所有实参？
+	通过argument获取， 是一个集合，类数组。
+ 自执行函数   (function(){}())
+ // 匿名函数：  function() {}, 没有标识符	
+
+ // 形参， 实参
+        // 形参： 函数定义时，括号内写入的变量
+        // 实参： ，函数执行时括号内传入的值
+        // 如果定义了形参，没有传入实参的话，形参默认是undefined
+        // 传入的实参和形参是一一对应关系
+ // 浏览器在执行函数时，默认会在第一行把形参声明成变量
+ // return 关键字
+            // 作用： 1. 终止函数执行。
+                    //2. 返回一个函数的值
+            // 如果没有返回值，默认返回undefined;
+
+ // 事件：用户与浏览器交互的瞬间
+        // 事件处理程序：用户触发事件，处理事件的函数
+
+变量提升： 在作用域代码执行前，当前作用域的代码会提前进行变量提升，
+        //  就是把var声明的变量默认放到当前作用域的最前面，只声明不赋值
+        //   函数（function 标识符 {}）也会进行提升，声明且赋值
+
+
+// 作用域： js代码可以执行的地方。 
+        // 全局作用域：一个html里面所有script标签
+        // 局部作用域： 在es5中，函数作用域。
+        //      1.局部作用域的变量是不可以被外界访问
+        //      2.全局变量可以被局部使用
+        // function fn() {
+            // 函数作用域
+        // } 
+        // 作用域链： 当局部作用域使用一个变量时，如果存在变量（var 一个变量），直接使用，
+        //            如果不存在，向上一个作用域进行查找，直到找到全局作用域，如果还没有，浏览器报错（证明没有生命果该变量）
+
+  // 数组：有序的集合。有索引（数字表示）， 值(任意一种数据类型)；
+        // 1.数组的声明
+            // 1.字面量方式
+            // var arr = [1, 2, 3, 4, 5];
+
+            // 2.构造函数模式
+            // js中是没有类的概念，但是可以通过构造函数来实现这种方式
+            // var arr4 = new Array(1,2,3,4,5);
+            // 当传入一个参数，且参数为数字的时候，参数代表的是生成数组的长度，里面没有元素。
+            // 数组的最大长度为 2**32 - 1
+
+        // 2.数组遍历
+        //   通过索引获取数组中的元素
+            var arr = [100,23,65,56,2, 'haha', '日子'];
+            for(var i = 0; i < arr.length; i++) {
+                // 打印数组中的每一个元素
+                console.log(arr[i]);
+            }
+          
+        // 3.修改数组的值
+            // 修改数组的值，如果不存在，则设置一个新值。
+            // 如果长度不够，自动补全。
+    
+        //稀疏数组：数组中如果存在empty
+         
+        // 密集数组：数组的元素个数跟长度一样
+
+
+// pop删除数组中最后一个元素， 返回删除的元素， 会改变原有数组
+ // push： 添加元素，在数组的最后面, 返回数组的长度， 会改变原有数组
+ //shift： 删除数组中第一个元素， 返回第一个删除的元素，会改变原有数组
+//unshift: 在数组前面添加元素，返回数组长度，会改变原有数组。
+//splice: 至少有两个参数，第一参数：开始位置，影响的个数， 第三个至更多：需要替换的值 然后返回被删除的项目
+// 截取数组
+        // slice: 截取数组，一个参数： 开始位置，第二个：(选填)结束位置， 如果第二个参数不写， 默认截取到最后一个
+        // 不会改变原有数组， 返回值就是截取的数组。
+
+  // 1.基本数据类型
+        // string, number, null, undefined, boolean
+        // 【注意】：值是不可以进行改变
+
+        // 2.引用数据类型
+        // 对象：Array， Date, function, Regexp......
+        // 基本数据类型，改变值相当于重新赋值。
+
+
+ // 什么是引用数据类型?
+        // 当声明一个对象(引用数据类型)时， 在堆内存中开辟一个地方，
+        // 用来存储值，并把这个地址返回给变量。
+
+
+  // 对象：无序的集合
+   // 对象左边是key值， 也称之为索引
+        // 右边的： 代表值，任意数据类型
+
+// concat(), join(), reverse(), sort(), map(), filter(), forEach()
+   // concat(): 合并数组，返回合并的结果, 不改变原有数组
+   // join()：把数组拼接成字符串，括号内传入拼接符，不改变原有数组
+    // map(), filter(), forEach()不会改变数组本身
+
+ // reverse():颠倒数组元素。会改变原有数组。
+ // es5新增方法
+    // 高阶函数 ,函数的参数还是函数
+
+// map()循环数组，括号内传入一个函数，函数的形参代表的是每一个数组元素，
+    //  传入的函数设置返回值，当前元素变为返回值
+    // 【注意】：有几个元素循环几次，empty不会触发循环
+
+// filter()过滤数组，返回满足条件的元素 
+
+  arr.forEach(function(item, index, arr) { 
+        //item 数组的元素， index代表元素的索引， arr循环的数组
+        console.log(item, index, arr);
+    })
+    //别人定义的函数， 传入一个函数，设置三个参数，可以求和  
+    function fn(a) {
+        a(10,20,30)
+    }
+    var a = function(b, c, d) {
+        return b + c + d;
+    }
+    fn(a);
+
+// sort()比较，根据字符串进行比较（字符串比大小，是根据ASCII码 表进行比较）；
+ // sort()高级用法：传入一个函数，函数有两个参数：a, b。 如果函数返回 a - b,返回从小到大排序的数组。
+        // 如果函数return b - a ,返回从大到小的数组
+
+toUpperCase()把一个字符串全部变为大写：
+toLowerCase 小写
+// charAt(): 查找对应下标的字符
+// charCodeAt() 返回对应字符的ASCII编码
+// concat() 拼接字符串
+//slice()截取字符串 开始到结束 
+// substring(), 截取字符串： 默认把最小的参数当做开始位置，大的数字结束位置
+// substr() 起始位置，截取个数 
+// indexOf 查找元素，返回下标
+// replace() 替换字符串
+// split(): 括号内是分割符号，返回数组  
+ // trim(): 去除前后空格
+//instanceof 判断类型 
+
+ // string, number, boolean 称为基本包装类型
+ //当基本包装类型使用方法时，内存中会默认创建一个对应的对象,使用调用的方法，把值返回，最后销毁。
+  // 基本数据类型不可以添加属性， 添加后会被销毁
+什么是深拷贝， 什么是浅拷贝？
+	深拷贝：引用数据类型的值复制给另外一个变量，其中一个值改变，不会影响另外一个
+	浅拷贝：引用数据类型把地址给了另外一个变量，其中一个改变，另外一个也会改变。
+
+ // 返回当前电脑时间，为字符串
+        var date = Date();
+ // 不传参数, 返回电脑电脑时间的日期对象
+         var date = new Date();
+ // 传一个参数： 1.为字符串， 必须是日期字符串，返回当前日期对象
+                    // 2. 如果数字，代表毫秒，返回格林尼治时间+这个毫秒数的日期
+//date.getTime()；当前日期对象到格林尼治时间的毫秒数：
+ // Date.parse() 默认传日期字符串， 返回当前日期字符串到格林尼治时间的毫秒数
+date.getFullYear(), 
+date.getMonth(),
+date.getDate()，
+date.getHours(),
+date.getMinutes(), 
+date.getSeconds()，
+
+ // 日期对象转为年月日
+        console.log(date.toLocaleDateString());  
+// 日期对象转为时分秒
+        console.log(date.toLocaleTimeString()); 
+  // 
+        console.log(date.toLocaleString());
+
+ // 定时器： 一定时间去只执行函数 （多次）setInterval
+// 延时器: 预约函数多少毫秒以后执行（一次）setTimeout
+ clearInterval();
+ clearTimeout();
+
+// window 是js运行在浏览器环境中，全局对象为window 
+ // navigator : userAgent:查看浏览器基本信息
+// screen: 获取屏幕尺寸
+ // location: 浏览器地址， 导航栏
+ // host: ip地址 + 端口号 developer.mozilla.org:4097
+        // hostName: ip地址 developer.mozilla.org
+        // hash: #+后面的内容 
+        // href： 整个地址 
+        // pathname： 文件地址： host之后，？之前 
+        // search： ?后面的内容
+        // port： 端口号  8080
+        // protocol： 传输协议 （http:）
+        // assign() // 跳转链接 ==> location.href = 'http://www.baidu.com';
+        // reload() // 重新加载
+        // replace() // 跳转链接 地址不会保存在历史记录中
+        // history ；历史记录
+        // length: 打开的tab页记录的历史条数
+        // go():  跳转页面 正数前进， 负数后退
+        // back()： 后退
+        // forward()：前进
+        // open:打开新窗体
+        //  地址、打开方式：默认是_blank
+
+ document.getElementById('ulbox');
+document.querySelector('#ulbox');
+document.getElementsByClassName('item');
+document.querySelectorAll('.item');
+document.getElementsByTagName('li');
+getAttribute 获取属性 
+setAttribute 设置属性 
+ 
+
+ // 节点类型      nodeType     nodeValue    nodeName
+        // ->元素节点      1             null       标签名称
+        // ->文本节点      3             文本内容    #text
+        // ->注释节点      8             注释内容    #comment
+        // ->根节点        9              null      #document
+
+
+1 、增 ---------createElement
+var oDiv = document.createElement('div');
+//appendChild();// 添加到父节点的最后面
+ // insertBefore： 添加到某个元素的前面，第一个：要加入的元素， 第二个：已知节点
+      $ul.insertBefore($comment, $liClass);
+// replaceChild： 替换节点： 第一个：替换的元素， 第二个：被替换的元素
+            $ul.replaceChild($text, $liOne);
+// 克隆节点:cloneNode(),有一个布尔类型的参数: true: 完全克隆 false: 表面克隆，只克隆本身，不克隆子元素
+
+2 、删 ---------removeChild, remove()
+语法 :fatherObj.removeChild(childrenObj)
+参数解释：
+a 、 fatherObj: 要删除子元素的元素对象
+b 、 childrenObj: 要被删除的子元素对象
+
+3 、改 ---------
+input.value = 'xxx';
+btn.id = 'xx';
+oDiv.style.color='xx';
+
+4 、查 --------- 六种
+document.getElementById(''); 常用
+document.getElementsByClassName('');(ie9+) 常用
+document.getElementsByTagName(''); 常用
+document.getElementsByName(''); 不常用
+document.querySelector( 选择器 )(IE8+)(IE8+)
+根据选择器返回匹配到的第一个元素
+document.querySelectorAll( 选择器 );(IE8+) 常用
+根据选择器返回匹配到的所有的元素
+
+ // 创建元素节点， 括号内写标签名称
+        // 创建文本节点，括号内写文本内容
+        var $text = document.createTextNode('你好世界！！！');
+        // 创建注释文本，括号内写注释文本
+        var $comment = document.createComment('<li></li>');
+        // 创建文档碎片, 没有参数
+        var $frag = document.createDocumentFragment();
+        // 文档碎片相当于一个空盒子， 可以把创建的节点先加入到文档碎片中，然后在一次性添加到文档中
+        // 目的：减少文档的重拍重绘，提高性能。
+
+ // clientLeft, clientTop 边框边距
+// clientWidth，clientHeight 可视区域的尺寸
+// offsetWidth, offsetHeight 实际尺寸 (可视尺寸+ 边框)
+
+ // 获取子元素
+        childNodes //获取子节点
+        children  // 获取子元素
+        firstChild// 获取第一个子节点
+        firstElementChild// 获取第一个子元素子节点
+        console.log($ul.lastChild);  //获取最有一子节点
+        console.log($ul.lastElementChild);
+
+        // 获取父元素
+        console.log(($ul.lastElementChild.parentNode.parentNode)); //获取父级元素
+        console.log(($ul.lastElementChild.parentElement));
+
+        // 查找兄弟元素
+
+        console.log($ul.lastElementChild.previousElementSibling);// 上一个元素节点
+        console.log($ul.previousSibling); // 上一个节点
+        console.log($ul.previousElementSibling); 
+        console.log($ul.lastElementChild.nextSibling);
+        console.log($ul.nextElementSibling);
+
+
+
+  // 事件
+        //  -> 用户和浏览器交互的瞬间
+        // 事件处理程序
+        //  -> 处理事件的函数
+        //  -> this指向绑定的元素
+        // 函数this指向
+        //  -> 1. 全局作用域this指向window
+        //  -> 2. 函数作用域中.this指向只与函数调用方式有关 谁调用指向谁
+        // 鼠标事件
+        //  -> 1. mousedown: 鼠标按下事件
+        //  -> 2. mouseup: 鼠标抬起
+        //  -> 3. mousemove: 鼠标移动
+        //  -> 4. mouseenter: 鼠标进入
+        //  -> 5. mouseleave: 鼠标移出
+        //  -> 6. mouseover: 鼠标进入: 给子元素也添加事件处理程序
+        //  -> 7. mouseout: 鼠标移出
+        // 鼠标位置获取
+        //  -> 1. clientX,Y: 相对于浏览器的位置
+        //  -> 2. pageX,Y: 相对于整个文档
+        //  -> 3. offsetX,Y: 相对于元素的位置 
+元素位置的获取
+ offsetWidth: 获取元素宽度+边框
+ clientWidth: 获取元素可视宽度
+ clientLeft: 获取元素左边框的宽度
+offsetTop: 获取元素距离父级顶部的距离（父级：当前元素向上级元素寻找，如果有定位就是父级，如果没有知道找到body，body默认为父级）
+
+        //  -> 微软：冒泡流， 从最具体的元素传递到最不具体的元素（document）
+        //  -> 网景：捕获流， 从最不具体的元素传递到最具体的元素
+        // 事件流： 描述事件传递顺序（传递过程）,默认是冒泡流;
+
+        // dom事件流： 描述dom2级事件传递过程
+        // 三个阶段：捕获阶段、处于自身阶段、冒泡阶段
+        // 规定在dom2级中捕获阶段不可以触发事件， 但是浏览器都支持在捕获阶段触发
+
+        // dom2级事件
+        // 添加事件（事件监听）
+        // addEventListener():三个参数： 事件类型， 事件处理程序，bool是否捕获阶段触发
+
+// dom0级： 一个元素相同事件只能添加一个事件处理程序
+        // this指向事件绑定的元素
+        $box.onclick = function() {
+            console.log('我是谁？')
+        }
+
+        // dom2级： 一个元素相同事件可以添加多个事件处理程序
+        //  this指向事件绑定的元素
+        $box.addEventListener('click', function () {
+            console.log('我是div');
+        }, true);
+
+      // 移出事件：
+            // DOM0
+            $box.onclick = null;
+            // DOM2
+            // removeEventListener():传入的参数跟添加事件监听时传入的参数一一对应， 且恒等于才可以取消
+  	$box.removeEventListener('click', fn, false)
+
+// ie8之前
+        var $btn = document.getElementById('btn');
+        // 添加事件：attachEvent() : on + 事件类型， 事件处理程序
+        // this指向全局的window
+        $btn.attachEvent('onclick', function(){
+            console.log('我是按钮')
+        })
+        $btn.attachEvent('onclick',fn)
+        function fn(){
+            console.log('我是按钮2222');
+        }
+        // 移除事件
+        $btn.detachEvent('onclick', fn)
+
+
+
+// 获取非行内样式
+        function getStyle(ele, attr) {
+            if(window.getComputedStyle) {
+                return window.getComputedStyle(ele, null)[attr];
+            }
+            // 兼容ie 的写法
+            return ele.currentStyle[attr];
+        }
+
+ // 阻止冒泡
+             if(ev.stopPropagation) {
+                ev.stopPropagation();
+            } else {
+                // 兼容ie
+                ev.cancelBubble = true;
+            }
+
+// 右键事件 document.oncontextmenu
+//键盘按下	 $inp.onkeydown  键盘抬起$inp.onkeyup  //     // 不区分大小写可以组合键 
+ 键盘按压$inp.onkeypress  // 1.可以区分大小写 // 2.不可以检测组合键
+ // 返回对应按键的ASCII编码    var keyCode = ev.keyCode || ev.which;
+// 组合键  if(ev.ctrlKey) {
+        //         if(keyCode == 13) {
+        //             console.log('按下了 ctrl + enter');
+        //         } else if (keyCode == 80) {
+        //             console.log('按下了 ctrl + p');
+        //             ev.preventDefault();
+        //         }
+
+//清除浏览器默认行为 1， ev.preventDefault();
+  	2，if(ev.preventDefault) {
+                    ev.preventDefault()
+              	} else {
+                    ev.returnValue = false;
+              	  }
+	3,return false (不建议)
+        // focus: 文本框获取焦点时触发事件
+        // blur: 文本框失去焦点时触发事件
+        // change: 文本框失去焦点，较上一次内容，如果发生改变触发事件
+        // input: 文本框内容改变，立即触发
+
+ // 事件委托：本身自己完成的事件交给父级来代替完成
+// 获取目标元素：event.target || event.srcElement
+  // 优点：相同事件只需创建一次即可，减少资源浪费，提高性能
+       // 【注意:】不是所有的事件都可以利用事件委托
+
+ // 正则表达式： 字符串按照某种规则进行匹配
+        // 字面量
+        var reg = /123/;
+        // 构造函数
+        var reg = new RegExp('123');
+
+// 正则表达式组成部分
+
+        // 修饰符
+        // g 全局匹配
+        // i 字母不区分大小写
+        // m 区分多行
+
+//  元字符
+        . 匹配除了（\n）换行符以外的任意字符
+         \  转义符
+         \d 0-9的数字
+         \D 非数字
+         \w 字母， 数字, _
+         \s 匹配空字符
+         \b 匹配边缘
+
+^ 开始符号
+        // $ 结束符号
+
+量词元字符
+        // * 0次或者多次
+        // + 至少一次 {1,}
+        // ? 0次或者1次
+        // {m} m次
+        // {m, n} m次到n次
+        // {m,} 至少m次 
+        // [abc] a、b、c的其中一个
+            // -> [a-z]
+            // -> [a-zA-Z0-9]
+        // a|b  a或者b选一个
+
+        // () 分组
+
+test() 检测字符串是否满足正则表达式规则，如果满足返回true，不满足返回false
+ exec()   字符串捕获，返回满足正则表达式的字符
+        // 捕获不到，返回结果null
+// 贪婪性： 把一次满足条件的结果一下返回
+// 懒惰性： 找到一个满足的条件，后面不在继续经行寻找
+lastindex: 开始的位置， 每次查询完毕后， 记录这一次最后的位置。
+        // 当捕获的内容为null时， lastindex会重置。
+
+
+  //  字符串中正则的使用
+ replace() 替换字符
+search  查询满足条件的字符串
+ match  捕获满足条件的字符串
+
+// call, apply 改变函数内部this指向
+        // call和apply： 第一个参数： this指向的对象
+        // call第二个参数及跟多，都是传入函数的实参
+        // apply 第二个参数： 是实参的集合
+
+ // let 声明一个变量， const声明一个常量
+        // let跟const： const一经声明，就不可以重新赋值，但是let声明的可以
+        // let、const 和var的区别：
+            // 1. 变量名称不可以重复
+            // 2. 不存在变量提升，使用变量不能再声明前使用(暂时性死区)
+            // 3. 会生成块级作用域
+
+解构赋值
+var arr = [1,2,3,4,5];
+        var [a,b,c,d] = arr;
+        console.log(a, b, c, d);//1,2,3,4
+...
+ var arr1 = [1,23,3,45,5];
+        var arr2 = [4,5,6,7,8];
+        arr1 = [...arr1, ...arr2];
+
+'use strict'
+        // 严格模式优点
+            // 1.减少js代码中不合理的地方，保证js代码的运行安全
+            // 2.提高编译器的效率
+            // 3. 为未来js版本做铺垫
+
+        // 开启严格模式： 在作用域最上面写上 'use strict'
+        // 1.不能使用未声明的变量
+        // 2.再严格模式下，函数如果没有调用者，this指向null或者undefined
+        // 3.在严格模式下，arguments元素改变， 对应的形参不会改变。
+        // 4. 在严格模式下, arguments不可以重新赋值
+        // 5. 严格模式下，不可以执行使用八进制
+        // 6. 严格模式下不可以使用with语句
+
+//字符串模板 `${}`
+ // Set: 不允许元素重复(跟数组差不多，只不过元素不能重复)
+
+// 查询是否存在某个元素
+        console.log(a.has(100));
+        // 清空所有元素
+        // a.clear();
+        console.log(a);
+        // size,length表示元素个数
+
+        // Map 用法类似于对象，结构类似于二维数组
+        // 和对象的区别：Map的属性可以是任意值
+        var map = new Map([[{}, 'xiaoaln'], [function(){}, 18], ['color', 'red']]);
+        
+        // 设置值：key， value
+
+ // 数组去重
+        var arr = [1,2,3,4,1,2,2,12,3,1,23,1,23,1];
+        var set = new Set(arr);
+        arr = [...set];
+
+// 循环 for of 循环，循环元素，item代表的是元素
+        // 不可以循环object;
+ // for in循环对象的可枚举属性
+// Symbol 第七种数据类型，返回一个独一无儿的值
+        // Symbol属于基本数据类型
+
+  // 函数设置默认值
+        // function fn(x) {
+        //     x = x || 9;
+        // }
+        function fn(x = 9) {
+            console.log(x);
+        }
+
+// 箭头函数
+        var getName = (x) => {
+            console.log('111')
+        }
+        fn()
+// 只有一个形参，函数只有一句代码，箭头函数才可以简写
+ // 箭头函数中的this指向上下文
+        // 上下文:函数声明时，所在的作用域
+
+//  var i=(function(){
+//      return{
+//          init:function(){
+//              this.event();
+//          },
+//          event:function(){
+//              var _this=this;
+//          }
+//      }
+//  }())
+//  init();

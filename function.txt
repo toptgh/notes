@@ -1,0 +1,708 @@
+﻿
+//判断类
+function IsNumber(sVal){ //检查传入值是否是数字型
+    if (sVal===''&&sVal ==null){
+        return false;
+    }
+    if(!isNaN(sVal)){//isNaN==true时不是数字
+        return true;
+    }else{
+        return false;
+    }
+    //还可以直接这样写 return !isNaN(sVal);
+    // return true;
+}
+//检查传入的年月日是否合法
+//方法二是使用传统的if else做判断，这里仅留存作为复习
+function IsVaildDate(sYear,sMonth,sDay){
+    if(IsNumber(sYear)&&IsNumber(sMonth)&&IsNumber(sDay)){
+        sYear=parseInt(sYear);
+        sMonth=parseInt(sMonth);
+        sDay=parseInt(sDay);
+        var date=new Date(sYear,sMonth-1,sDay);
+    }else{
+       console.log("年月日不合法，其中存在非法字符！");
+       return  false
+    }
+    
+    if (sYear==date.getFullYear()&&sMonth-1==date.getMonth()&&sDay==date.getDate()){
+        return true;
+    } 
+    return false;
+}
+function IsVaildDate2(sYear,sMonth,sDay){
+    if(IsNumber(sYear)&&IsNumber(sMonth)&&IsNumber(sDay)){
+        sYear=parseInt(sYear);
+        sMonth=parseInt(sMonth);
+        sDay=parseInt(sDay);
+    }else{
+       console.log("年月日不合法，其中存在非法字符！");
+       return  false;
+    }
+        if(sYear>=1900){//年份合法
+            if(sMonth>=1 && sMonth<=12){//月份合法
+                //1、31天的
+                if(sMonth==1 || sMonth==3 || sMonth==5 || sMonth==7 || sMonth==8 || sMonth==10 || sMonth==12){
+                    if(sDay>=1 && sDay<=31){
+                        return true;
+                    }
+                }else if(sMonth==4 || sMonth==6 || sMonth==9 || sMonth==11 ){//30天的
+                    if(sDay>=1 && sDay<=30){
+                        return true;
+                    }
+                }else if(sMonth==2){
+                    if(IsRunYear(sYear)){//闰年
+                        if(sDay>=1 && sDay<=29){
+                            return true;
+                        }
+                    }else{
+                        if(sDay>=1 && sDay<=28){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    return false;
+}
+function IsDateType(sDateStr,sType){
+    var a=0,b=0,sYear,sMonth,sDay; 
+    var sDateStr2=new String(sDateStr);
+    sfpos1=sDateStr2.indexOf(sType);
+    sfpos2=sDateStr2.lastIndexOf(sType);
+    strLength=sDateStr2.length;
+    if (sfpos1!=4||sfpos2!=7||strLength<=0){
+        console.log("分隔符位置不对，请检查！");
+        return  false;
+    }
+    sYear=sDateStr2.slice(0,sfpos1);
+    sMonth=sDateStr2.slice(sfpos1+1,sfpos2);
+    sDay=sDateStr2.slice(sfpos2+1,strLength);
+    if(IsNumber(sYear)&&IsNumber(sMonth)&&IsNumber(sDay)){
+        sYear=parseInt(sYear);
+        sMonth=parseInt(sMonth);
+        sDay=parseInt(sDay);
+    }else{
+       console.log("年月日不合法，其中存在非法字符！");
+       return  false;
+    }
+    
+    if(IsVaildDate(sYear,sMonth,sDay)){
+        return true;
+    }else{
+        console.log("日期不合法！");
+       return  false;
+    }
+    return  false; 
+}
+function IsEmail(emailaddr) {  
+    if(emailaddr.indexOf("@")>0){//判断存在@，并且第一位不能是@
+        if(emailaddr.indexOf("@")==emailaddr.lastIndexOf("@")){//是否只存在一个@
+            if(emailaddr.indexOf("@")+1<emailaddr.indexOf(".",emailaddr.indexOf("@"))){//@之后有点，且中间有分隔
+                return true;
+            }else{
+                return false;
+            }
+        }else{//存在多个@
+            return false;
+        }
+    }else{//不存在@
+   
+        return false;
+    }
+    return false;
+}
+//日期类
+function GetDaysOfMonth(sYear,sMonth){//获取输入年月的天数
+
+    var date = new Date(sYear, sMonth, 0);
+     return(parseInt(date.getDate()));
+}
+function GetWeekOfDay(sYear,sMonth,sDay){//获取某天是星期几
+    var str='';
+    var date=new Date(sYear,sMonth-1,sDay); 
+        switch(date.getDay()){ //getDay()返回是0-6
+                    case 0:str='礼拜天';break;
+                    case 1:str='礼拜一';break;
+                    case 2:str='礼拜二';break;
+                    case 3:str='礼拜三';break;
+                    case 4:str='礼拜四';break;
+                    case 5:str='礼拜五';break;
+                    case 6:str='礼拜六';break;
+                    default:str='输入数据不正确';break;
+                }
+    return str;
+}
+function GetDaysOfTwoDate(sDateStr1,sDateStr2){//2个日期的间隔
+    console.log('如果出错请先检查传入日期格式，建议日期格式如2018-07-24');
+    console.log('起始时间   '+sDateStr1+'---'+'截止时间   '+sDateStr2);
+    var sDate1=new Date(sDateStr1),sDate2=new Date(sDateStr2);
+    var BetweenDays=Math.floor(Math.abs(Date.parse(sDate2)-Date.parse(sDate1))/(1000*60*60*24));
+    return BetweenDays;
+}
+function IsRunYear(sYear){//判断是否闰年
+    // var IsRun=false;
+    // ((sYear%4==0 && sYear%100!=0)||(sYear%400==0))?IsRun=true:IsRun=false;
+    // return IsRun;
+
+    // return ((sYear%4==0 && sYear%100!=0)||(sYear%400==0))?true:false;
+    if ((sYear%4==0 && sYear%100!=0)||(sYear%400==0)){
+        return true;
+    }
+    return false; 
+}
+function GetNumOfTheDate(sYear,sMonth,sDay){//获取某天是年内第几天
+    var SumDay=0;
+        if(sMonth>1){
+             for(var i=1;i<sMonth;i++){
+                 SumDay=SumDay+GetDaysOfMonth(sYear,i);
+             }
+             SumDay=SumDay+sDay;
+         }else{
+            return sDay;//如果是1月份就无需循环了，比如1月5日，就是当年的第5天
+         }
+         return SumDay;
+}
+function GetNumOfTheDate2(sYear,sMonth,sDay){
+var days = 0,febDays=28;
+if(IsRunYear(sYear)){
+    febDays=29;  
+}
+switch(sMonth){
+    case 12:days=days+30;
+    case 11:days=days+31;
+    case 10:days=days+30;
+    case 9:days=days+31;
+    case 8:days=days+31; 
+    case 7:days=days+30; 
+    case 6:days=days+31;
+    case 5:days=days+30;
+    case 4:days=days+31;
+    case 3:days=days+febDays;
+    case 2:days=days+31;
+    case 1:days=days+sDay;
+    return days;
+}
+}
+function GetMonthsOfTwoDate(sDateStr1,sDateStr2){//2个日期的月份差
+    var sDate1=new Date(sDateStr1),sDate2=new Date(sDateStr2);
+    return (sDate2.getFullYear-sDate1.getFullYear)*12+(sDate2.getMonth-sDate1.getMonth)
+}
+function GetYearsOfTwoDate(sDateStr1,sDateStr2){//2个日期的年份差
+    var sDate1=new Date(sDateStr1),sDate2=new Date(sDateStr2);
+    return (sDate2.getFullYear-sDate1.getFullYear)
+}
+function GetMyTimeString(sDateStr1,opers){//获取当前时间字符串
+    if(sDateStr1==undefined||sDateStr1==null||sDateStr1==""){
+        var now=new Date();
+    }else{
+        var now=new Date(sDateStr1);
+    }
+    var timearr=[];
+    timearr.push(now.getHours()<9?("0"+now.getHours()):now.getHours());
+    timearr.push(now.getMinutes()<9?("0"+now.getMinutes()):now.getMinutes());
+    timearr.push(now.getSeconds()<9?("0"+now.getSeconds()):now.getSeconds());
+        if(opers==undefined||opers==""){    
+          return  timearr.join(":");   
+    }else{
+        return  timearr.join(opers);   
+    }
+}
+function GetMyDateString(sDateStr1,opers){//获取当前日期字符串
+    if(sDateStr1==undefined||sDateStr1==null||sDateStr1==""){
+        var now=new Date();
+    }else{
+        var now=new Date(sDateStr1);
+    }
+    var datearr=[];
+    datearr.push(now.getFullYear());
+    datearr.push(now.getMonth()+1<9?("0"+(now.getMonth()+1)):now.getMonth()+1);
+    datearr.push(now.getDate()<9?("0"+now.getDate()):now.getDate());
+        if(opers==undefined||opers==""){    
+          return  datearr.join("-");   
+    }else{
+        return  datearr.join(opers);   
+    }
+}
+//功能类
+function SRandomInt(s){//随机数，n为最大数，例如n为3则，产生0、1、2、3之内的随机整数
+    return Math.floor((Math.random()*100*s)%(s+1))
+}
+function CheckCodeByRandom(s){
+    var str="";
+    for(i=1;i<=s;i++){
+        str+=parseInt(Math.random()*10);
+    }
+    return str;
+}
+function maopao_sort(arr){//冒泡排序1:每次用一个数和其他全部数去做比较，如果大于则交换
+    for(var i=0;i<arr.length-1;i++){
+        for(var j=i+1;j<arr.length;j++){
+            if(arr[i]>arr[j]){
+                // var temp=arr[i];
+                // arr[i]=arr[j];   //两种交换算法
+                // arr[j]=temp;
+                arr[i]=arr[i]+arr[j];
+                arr[j]=arr[i]-arr[j];
+                arr[i]=arr[i]-arr[j];
+            }
+        }
+
+    }
+    return arr
+}
+function maopao_sort2(arr) {  
+    for(var i=0;i<arr.length-1;i++){
+        for(var j=0;j<arr.length-1-i;j++){
+            if(arr[j]>arr[j+1]){
+			    var temp = arr[j];
+			    arr[j] = arr[j+1];
+			    arr[j+1] = temp;
+            }
+        }
+    }
+    return arr
+}
+function quick_sort(arr){
+    if(arr.length<=1){
+		return arr;
+	}
+	var midIndex=Math.floor(arr.length/2);//取基准点
+	var midIndexVal=arr.splice(midIndex,1);//取基准点的值,splice(index,1)函数可以返回数组中被删除的那个数arr[index+1]
+	var left=[];//存放比基准点小的数组
+	var right=[];//存放比基准点大的数组
+	//遍历数组，进行判断分配
+	for(var i=0;i<arr.length;i++){
+		if(arr[i]<midIndexVal){
+			left.push(arr[i]);//比基准点小的放在左边数组
+		}
+		else{
+			right.push(arr[i]);//比基准点大的放在右边数组
+		}
+		console.log("第"+(++times)+"次排序后："+arr);
+	}
+	//递归执行以上操作,对左右两个数组进行操作，直到数组长度为<=1；
+	return quickSort(left).concat(midIndexVal,quickSort(right));
+
+}
+
+function select_Sort(arr) {//选择排序
+    var len = arr.length;
+    var minIndex, temp;
+    for (var i = 0; i < len - 1; i++) {
+        minIndex = i;                         //每次都从已排序序列的末尾后一位开始
+        for (var j = i + 1; j < len; j++) {
+            if (arr[j] < arr[minIndex]) {     //寻找最小的数
+                minIndex = j;                 //将最小数的索引保存
+            }
+        }
+       //放到已排序序列的末尾(即交换)，该操作很有可能把稳定性打乱，所以选择排序是不稳定的排序算法
+        temp = arr[i];  
+        arr[i] = arr[minIndex];
+        arr[minIndex] = temp;
+    }
+    return arr;
+}
+
+function MyIndexOf(str2,str1,n){//n为起始位置
+    let i;
+    let len1=str1.length;//子串长度
+    let len2=str2.length;//父串长度
+    if(n==undefined ||n==null||n<=-1) {
+        i=0;
+    }else if(n>len2-1){
+        return -1; 
+    }else{
+        i=n;
+    }
+    if(len1>len2){
+        return -1;
+    }else if(len1==len2){
+        if(str1==str2){
+            return 0;
+        }else{
+            return -1;
+        }
+    }else{
+        let str21='';
+        while(i<len2){
+         //拼合对比的父串，i到len1
+         str21=str2.substr(i,len1);
+         if(str21==str1){
+            return i;
+         }
+         i++;
+        }
+        if(i==len2){
+            return -1;
+        }
+    }
+}
+//数学类
+function factorial1(sVal){//阶乘，一般方法
+    var sum=1;
+    for(var i=1;i<=sVal;i++){
+        sum*=i;
+    }
+    return sum
+}
+function factorial2(sVal){//阶乘，递归方法
+    if(sVal>1){
+        return sVal*factorial2(sVal-1);
+    }else{
+        return 1;
+    }
+}
+function sxh(sVal){//判断是否是水仙花数
+    var a,b,c;//百位、十位、个位
+    if(!IsNumber(sVal)){
+        console.log("请传入一个数字");  
+    }
+    a=parseInt(sVal/100);
+    c=parseInt(sVal%10);
+    // b=parseInt((sVal-a*100-c)/10);
+    b=parseInt((sVal%100)/10);
+    if (sVal==a*a*a+b*b*b+c*c*c){
+        return true;
+    }
+    return false;
+}
+function IsPrimeNum(sVal){//素数
+
+    if(IsNumber(sVal)){
+        sVal=parseInt(sVal);
+        for(var n=2;n<=sVal-1;n++){
+            if(sVal%n==0){
+                return false; 
+            }
+        }
+    }else{
+        console.log("请传入一个数字");
+        return false;
+    }
+    return true;
+}
+function spliceNum(num){//循环分割n位数，求出每位上的数字
+        var arr=new Array();
+        // var arr2=new Array();
+        while(num>0){
+            var temp = num%10;
+            num = parseInt(num/10);
+            arr.push(temp);
+        }
+        //也可写作
+        // for(var i=arr.length-1;i>=0;i--){
+        //     arr2.push(arr[i]);
+        // }
+        return arr.reverse();
+}
+function spliceNum2(num){//循环分割n位数，求出每位上的数字
+    var length = 0, temp =0; 
+    var arr=new Array();
+    var num2=num;
+    for(;;){
+        num2= parseInt(num2/10);
+        length++;
+        if (num2==0){
+            break;
+        }
+    }
+    // console.log(length);
+    for(var i=length-1;i>=0;i--){
+        temp=num%10;
+        num=Math.floor(num/10);
+        arr[i]=temp;
+    }
+    return arr;
+}
+
+ function spliceNum3(num){//循环分割n位数，求出每位上的数字
+    var arr=new Array();
+	var strnum=num.toString(); 
+	var len=strnum.length;
+    for(var i=0;i<len;i++){
+	 var temp = num%10;
+     num = parseInt(num/10);
+	 arr.push(temp);
+	 if(num==0){
+		 break;
+	 }
+	}
+	return arr.reverse();
+ }
+
+function TransferTenToOther(num,type) {//10进制转为其他进制
+    return num.toString(parseInt(type));
+  }
+function transfer(num,m,n){//把m进制的数字num转为n进制
+  var s = num+'';
+  return parseInt(s,m).toString(n);
+}
+function gys(num1,num2){//求n1和n2的最大公约数，循环方法
+	var min = num1<num2?num1:num2;
+	for(var i=min;i>=1;i--){
+		if(num1%i==0 && num2%i==0){
+			return i;
+		}
+	}
+}
+function gys2(n1,n2){//求n1和n2的最大公约数，递归方法
+    var n3=n1%n2;
+    if(n3==0){
+    return n2;
+    }
+    return gys(n2,n3);
+}
+
+//数组类
+function snorepeat(arr){//数组去重
+    var NewArr=[];
+    for(var i in arr){
+        if(!IsHaveNum(NewArr,arr[i])){
+            NewArr.push(arr[i]); 
+        }
+    }
+    //  console.log(NewArr);
+    return NewArr;
+}
+function snorepeat2(arr){//数组去重2，推荐
+    var NewArr=[];
+    for(var i in arr){
+        if(NewArr.indexOf(arr[i]) == -1){
+            NewArr.push(arr[i]); 
+        }
+    }
+    //  console.log(NewArr);
+    return NewArr;
+}
+function IsHaveNum(arr,num) {//数组中是否有这个元素  
+    for(var i in arr){
+        if(arr[i]==num){
+            return true ;
+        }
+    }
+    return false;
+}
+function ArraybyRand(n){//随机数组
+    var arr=new Array();
+    for(var i=0;i<n;i++){
+        arr.push(parseInt(Math.random()*10));
+    }
+    return arr;
+}
+function Arrayreverse(arr){//颠倒数组
+    var NewArr=[]; 
+     for(var i=arr.length-1;i>=0;i--){
+        NewArr.push(arr[i]);
+     }
+     return NewArr;
+}
+function ArrayIsEqual(arr1,arr2){//判断数组是否相等
+    if(arr1===arr2){
+        return true;
+    }else{
+        if(arr1.length!=arr2.length){
+            return false;
+        }else{
+            for(let i in arr1){
+                if(arr1[i]!=arr2[i]){
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+}
+//DOM型函数
+function getNodesByNodeType(nodes,type){//IE下指定节点类型的节点集合,1为元素
+    var children=[];
+    for(let i=0;i<nodes.childNodes.length;i++){
+        if(nodes.childNodes[i].nodeType==type){
+            children.push(nodes.childNodes[i]);
+        }
+    }
+    return children;
+}
+function getElementNodes(nodes){//IE下返回非文本类型节点
+	return getNodesByNodeType(nodes,1);
+}
+function getStyle(domObj,attr){//获取css样式
+    if(domObj.currentStyle){
+        return domObj.currentStyle[attr];
+    }else{
+        return window.getComputedStyle(domObj)[attr];
+    }
+}
+
+
+function getLeftAndTop(domObj){//获取某个DOM元素距离body的距离
+	var left1 = 0;
+	var top1 = 0;
+	var tempDomObj = domObj;
+	while(tempDomObj.tagName.toLowerCase()!="body"){
+		left1 = left1 + tempDomObj.offsetLeft+parseFloat(getStyle(tempDomObj,"borderWidth"));
+		top1 = top1 + tempDomObj.offsetTop+parseFloat(getStyle(tempDomObj,"borderWidth"));
+		tempDomObj = tempDomObj.offsetParent;
+	}	
+	return {
+		"left":left1,
+		"top":top1
+	}
+}
+
+//验证码倒计时
+    function VerificationCode(ele,Num){
+        $(ele).click(function(e){
+            e.preventDefault();
+            let num=Num;
+            let innerTimer=setInterval(function(){
+                num--;
+                if(num<=0){
+                    $(ele).text('获取验证码');
+                    clearInterval(innerTimer);
+                    return;
+                }
+                $(ele).text(num+'秒后重新获取');
+            },1000);
+        })
+    }
+
+点击全选
+function checkbox(eleall, ele) {
+            $(eleall).click(function () {
+                if ($(this).prop('checked')) {
+                    $(ele).check();
+                } else {
+                    $(ele).uncheck();
+                }
+            })
+        }
+        checkbox('.all','.list');
+        $.fn.extend({
+            check: function () {
+                return this.each(function () {
+                    this.checked = true;
+                });
+            },
+            uncheck: function () {
+                return this.each(function () {
+                    this.checked = false;
+                });
+            }
+        });
+
+//li随机颜色和鼠标进入移除会改变背景等
+ $.extend({
+            getColor() {
+                var str = '0123456789abcdef';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    var _random = Math.random() * 15;
+                    color += str[Math.round(_random)];
+                }
+                return color;
+            }
+        })
+        $.fn.extend({
+            setColor: function () {
+                this.each(function (index, item) {
+                    $(this).css("backgroundColor", $.getColor());
+                })
+                return this;
+            },
+            setHover: function (options) {
+	//默认颜色
+                var _default = {
+                    "backgroundColor": "#000",
+                    "color": "#fff"
+                }
+                // 记录上一次的值, 方便返回
+                var defaultCss = {};
+                // 合并对象, 把传进来的值,合并到_default
+                $.extend(_default, options)
+                this.on("mouseenter", function () {
+                    // 记录改变的样式
+                    for (var i in _default) {
+                        defaultCss[i] = $(this).css(i);
+                    }
+                    // 改变样式
+                    $(this).css(_default);
+
+                })
+                this.on("mouseleave", function () {
+                    $(this).css(defaultCss);
+                })
+            }
+        })
+        $("li").setColor().setHover({
+            "backgroundColor": "#000",
+            "height": 48,
+            "fontSize": 22
+        });
+
+
+//数组去重
+var arr=[1,2,2]
+var set=new Set(arr);
+arr=[...set];
+
+//斐波那契数列前多少项的集合
+function createFib(n) {
+           var arr = [];
+           for(var i = 0; i < n; i++) {
+               if(i == 0 || i == 1) {
+                   arr.push(1);
+                    continue;
+               }
+               arr.push(arr[i - 1] + arr[i - 2]);
+           }
+           return arr;
+       }
+       createFib(10000);
+
+
+<img class="lazy-img" src="xxx.png" attr-src="https://desk-fd.zol-img.com.cn/t_s960x600c5/g5/M00/01/0E/ChMkJ1uYemCIe9CdAAKWD2HK__IAArodgBa0YIAApYn350.jpg" alt="">
+    <script>
+        // 图片懒加载
+        // 减少http请求，减少服务器压力。同时也减少资源浪费
+        // 当用户滑倒指定的位置，才加载对应的图片
+        window.scroll = function() {
+            var $imgAll = document.querySelectorAll('.lazy-img');
+            for (var i = 0; i < $imgAll.length; i++) {
+                var top  = $imgAll[i].offsetTop - document.documentElement.scrollTop - window.innerHeight; 
+                if(top < 200) {
+                    $imgAll[i].src = $imgAll[i].getAttribute('attr-src');
+                }
+            }
+        }
+        var $img = document.createElement('img');
+        $img.src = "https://desk-fd.zol-img.com.cn/t_s960x600c5/g5/M00/01/0E/ChMkJ1uYemCIe9CdAAKWD2HK__IAArodgBa0YIAApYn350.jpg";
+        $img.onload = function() {
+            document.body.appendChild($img);
+        }
+        
+        // 图片预加载
+        // 等所有的图片都加载成功后，在展示页面。
+        // 目的： 有的页面依赖图片的展示效果，如果没有完全加载，影响展示效果
+
+        // var flag = document.createDocumentFragment();
+        // var count = 0;
+        // for (var i = 1; i < 7; i++) {
+        //     var $img = document.createElement('img');
+        //     $img.src = `img/logo(${i}).png`;
+        //     flag.appendChild($img);
+        //     $img.onload = function () {
+        //         count++;
+        //         if(count == 6) {
+        //             console.log(1);
+        //             document.body.appendChild(flag);
+        //         }
+        //         console.log('成功');
+        //     }
+        //     $img.onerror = function () {
+        //         console.log('失败');
+        //     }
+        // }
+    </script>
+
+

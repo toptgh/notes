@@ -1,0 +1,717 @@
+vue框架特点：数据双向绑定（JS和dom结构的传递）
+vue实例属性：data:{}  如果在data里的属性用=，那它的权限高，并且其余不起作用
+vue实例方法：methods：{}
+created(){} 自运行
+
+外部访问属性使用实例对象：vm.msg
+内部访问属性使用：this.msg
+页面访问属性使用：{{msg}}
+
+外部访问方法使用实例对象：vm.fn()
+内部访问方法使用：this.fn()
+页面访问方法使用：{{fn()}}
+
+指令：vue指令以v-开头
+作用：根据标签添加不同功能
+
+插入文本：v-text='msg'
+简写：{{msg}} 【差别：这个刷新会闪烁，解决id:app加v-cloak，并style加[v-cloak]{display:none}】
+
+插入html：v-html='msg'
+简写：{{{msg}}} 【只在1.0版本有效】
+
+显示隐藏：v-show='msg'【通过控制标签的display：none】用于频繁使用
+显示隐藏2：v-if='msg' 【通过控制标签是否存在】用于不常使用
+显示：msg：true 
+隐藏：msg：false 
+if判断：v-if可以搭配v-else-if、v-elses使用
+
+循环遍历：v-for 【可以遍历字符串，数字，数组，对象】
+v-for='str in msg'
+
+点击事件：v-on：click='fn()' 【传参要加括号，不传可不加】
+简写：@click='fn()'
+事件修饰符：【可以链式调用】
+清除浏览器默认事件：@click.prevent 
+阻止冒泡：@click.stop
+事件执行一次：@click.once
+
+绑定标签属性：v-bind:src='msg'
+简写：:src='msg'
+绑定class：在class属性中当class和:class一起时会添加新的，而其他title等属性会覆盖前面的
+class='box' :class="[arr,'header']"
+class='box' :class="{header:false}" 去除
+绑定style：:style="style"
+
+数据双向绑定：v-model
+数字输入框：v-model.number='msg' 
+单选框：  value="男"  v-model='msg'  msg:'男' 默认选中 
+多选框：v-model='msg' msg:true 选中
+下拉框：v-model='msg' msg:2018 选中
+
+不解析标签中的{{}}：v-pre
+
+只渲染一次：v-once
+
+
+事件委托和单击变色，再次单击不变色：
+div：:class='{orange:index==ins}'  v-for="(item,index) in info" @click='select(index)'
+属性：ins:-1
+方法： select(index){
+                    if(this.ins===index){//再次单击变回原来颜色
+                        this.ins=-1;
+                    }else{
+                        this.ins=index;//选中改变背景颜色
+                    } 
+                }
+
+
+自定义指令（自带指令不满足需求，使用自定义指令）
+    // 参数1：指令名字
+    // 参数2：指令的实现函数
+v-color="'red'"（值加'',变量不用）
+Vue.directive('color',(el,info)=>{（el元素，info对象）固定属性
+el.style.color=info.value//红色	
+})
+
+有多个div可以用自定义指令加上自定义修饰符用于判断是哪个div
+v-drag.x
+info.modifiers.x == true
+
+拖拽：
+鼠标到盒子距离=鼠标距浏览器e.clientX-盒子距浏览器div.offsetLeft
+移动距离left=鼠标距浏览器e.clientX-鼠标到盒子距离
+
+
+自定义过滤器：(可用于选择语言或数据美化后展示到页面)
+过滤器：对数据进行处理，得到一个新的结果，然后新的结果展示在页面中
+    // 参数1：过滤器名字
+    // 参数2：过滤器的实现函数
+{{msg | text('你好',2,3)}}
+Vue.filter('text',(value,...rest)=>{//value为msg，...rest得到数组，只有一个值传入rest为字符串
+})
+
+
+计算属性（用于计算商品价格等）
+        // 也是属性的一种
+        // 通过其他的属性，计算得到的属性结果
+
+方法一：在computed属性里使用方法
+var vm=new Vue({
+el:'#app',
+data:{},
+computed:{
+  count(){}
+}
+})
+调用方式是属性{{count}}
+
+方法二：在methods里使用方法
+调用方式是方法{{count()}}
+
+差别：
+computed计算属性，第一次调用会对结果进行缓存，下一次访问，直接使用缓存的结果
+如果相关联的属性发生变化，计算属性会重新计算并缓存。
+methods方法是调用多少次，执行多少次
+
+
+监听属性：
+监听方式1：实例创建后就执行监听
+普通：
+watch属性：watch:{
+ msg(newVal,oldVal){}
+}
+
+对象深度监听：
+watch:{
+obj:{
+    handler(){}
+    deep:true//不加这个将监听不到对象	
+},
+'obj.name':function(){}//监听对象的属性需要用符号""
+}
+
+//监听方式2：调用$watch就执行监听（可以控制是否开启监听）
+普通监听：
+this.$watch('message', (newVal, oldVal)=>{ });
+
+监听对象：
+this.$watch('obj', ()=>{
+       console.log('2监听到了obj发生了变化');
+}, {
+       deep: true
+})
+
+监听函数：
+//监听的值为一个函数，函数中涉及的属性发生变化，监听的回调函数就会执行
+this.$watch(function(){
+        console.log(this.a + this.b);
+        return 0;
+ }, ()=>{
+      console.log('监听的表达式发生了变化');
+})
+
+生命周期：
+每个 Vue 实例在被创建时从初始化到销毁的过程就是生命周期
+
+生命周期钩子/生命周期函数/钩子函数：
+在vue实例的生命周期中给了用户在不同阶段添加自己的代码的机会
+
+//创建的过程：
+1.new Vue()
+
+2.加载所有的生命周期方法（没有调用）
+
+3.执行beforeCreate生命周期钩子函数
+    在这个函数中，vue实例的数据观测，监听，事件。。等都没有加载
+
+4.加载vue实例的data,methods,computed,watch...
+
+5.执行created生命周期钩子函数
+    可以访问数据，事件等。。。
+    请求后台数据。。。
+
+6.判断是否有el配置项，如果没有判断$mount()是否会执行，如果执行，就走下一步。
+vm.$mount() 动态挂载 相当于el
+
+7.判断是否有template（对应的dom结构）
+
+8.取得实例对应的dom结构，渲染dom结构
+
+9.执行beforeMount生命周期钩子函数
+
+10.将渲染好的dom替换在el作用的dom中
+
+11.执行mounted生命周期钩子函数
+    可以操作dom了。。。。
+    不建议使用document操作。
+    使用$refs操作dom结构
+
+// 更新的过程：由于数据的变化导致dom的更新
+12.数据发生变化
+
+13.执行beforeUpdate生命周期钩子函数
+
+14.重新渲染dom结构
+
+15.执行updated生命周期钩子函数
+
+// 销毁的过程:
+16.执行beforeDestory生命周期钩子函数
+
+17.移除监听
+
+18.执行destroy生命周期钩子函数
+    销毁后不建议做任何操作
+
+// 声明组件
+    // 参数1：组件的名字(不能跟已有的标签名字重复, dom中标签名字不能用大写字符)
+    // 参数2：组件的内容
+ // 一个vue实例由多个组件组合而成
+
+创建组件
+Vue.component(‘hello’{
+//声明组件的dom结构，必须有一个根节点
+  template:``,
+  data:function(){
+   return{}
+}
+})
+
+组件分类：
+// 1.全局组件的声明方式,只要是vue的作用范围内，都能使用
+Vue.component()
+2.//声明局部组件，可以声明多个,声明在哪里就只可以在哪个位置使用。
+var vm=new Vue({
+  components:{
+     'hello':{
+     template:``,
+     components:{}//可以在组件里面再嵌套组件
+      },
+  }
+})
+
+v-for出现错误加上:key='index'
+
+
+webpack组件化：
+App.vue: 
+1.template里面写上<Home>标签（可以单标签和双标签）
+2.srcipt里面引入组件 import Home from './Home'
+3.声明组件：
+export default{
+   component:{
+       Home
+   }
+}
+4.style里面的样式是全局的，scoped(插在style标签里，用于设置局部样式)
+
+
+父子组件传值:
+父=>子：
+【通过绑定属性给子组件标签传值到组件内部】
+ 父：<Son :city="msg"></Son>
+       msg:'hello world'
+子：
+方法一：props: ['msg'],
+方法二：props: {//属性校验
+        	msg：String
+             },
+
+props是外部属性
+data是内部属性
+computed是计算属性
+
+子=>父:
+父：
+    绑定自定义事件
+    <son @data="Action"></son>
+    Action(params){}//接收子传的值
+子：
+<button @click="submitAction()">提交</button>
+ 点击事件： this.$emit('data', this.city);
+// 手动调用标签上的事件
+            // 在父组件中定义好子组件的事件
+            // 在子组件中触发
+            // 参数1：自定义的事件名字
+            // 剩余参数：调用自定义对应的事件执行函数的参数
+       
+【注意】：谁的数据谁处理，想要更新传来的数据时，需要把它赋值到本页面的data里面，再进行更新
+
+//发布订阅模式：
+// 多对多
+// 先订阅后发布才有效
+
+// 监听自定义事件
+// 参数1：事件名字
+// 参数2：回调函数，事件触发后就执行
+vm.$on('my-event', (params)=>{
+    console.log('监听到了事件执行了1');
+});
+
+// 触发事件，自定义事件
+// 参数1：事件名字
+// 参数2：执行事件的参数
+vm.$emit('my-event', '参数')
+
+组件的this是组件对象
+vm的this是Vue实例对象
+组件对象指向Vue实例对象
+
+非父子组件传值：
+main.js：Vue.prototype.$center=new Vue();
+App.vue: 引入组件即可
+触发：sonadd.vue：this.$center.$emit('add-event', this.value);
+监听：sonshow.vue：(放在created周期函数钩子)
+created(){
+        this.$center.$on('add-event', (value)=>{
+            this.listData.push(value);
+        })
+    }
+
+动态组件，vue自带的
+<component :is='show'/>(用于页面切换)
+<!-- 动态组件：显示哪一个组件有is属性决定。is值为组件标签名字 -->
+
+<!-- keep-alive缓存包裹的组件：（用于页面切换后保存当前的状态）
+        在组件将要销毁时，将组件对象读取到缓存中，就不会执行销毁。
+     -->
+    <keep-alive>
+        <component :is="comName"></component>
+    </keep-alive>
+
+activated(){}//组件成为活跃状态
+deactiveated(){}//组件失去活跃状态
+
+获取DOM标签：
+【当传的值不确定的时候，应该使用子传父的方式，ref适用值为确定的时候】
+访问普通标签：
+<p ref='name'></p>
+ mounted(){ //(放在mounted周期函数钩子) 
+      this.$refs //是全部ref的对象
+      this.$refs.name //获取的是name名字的标签（p）
+}
+【在普通标签或者子组件标签中ref的值是唯一的，如果加了v-for则ref的值为一个数组，子组件标签的ref为数组组件对象】
+
+访问子组件：
+<Com ref="name"/>
+mounted(){
+【可以先把this.$refs.name存在变量中，获取属性等在变量后面加就行】
+
+this.$refs.name //为子组件对象VueComponent
+
+this.$refs.name.msg //为子组件data里面的msg
+
+name.msg='hello' //可以更新msg
+
+this.$refs.name.fn() //调用子组件方法
+}
+
+this.nextTick(callback)，当数据发生变化，更新后执行回调。
+this.$nextTick(callback)，当dom发生变化，更新后执行的回调。
+
+slot插槽：
+【接收组件在外部使用时，组件标签中的dom结构，slot调用几次，就显示几次】
+【在子组件标签内部写标签时，会被子组件的结构覆盖，不想覆盖使用slot】
+【父组件=>子组件标签=>标签模板就等于<slot/>,<slot/>放在子组件页面里面】
+【父组件标签里没有设置slot='name'时，子组件<slot/>默认接收全部标签，想接收那个，就在那个标签设置slot值】
+单独接收p标签：
+父组件：<p slot='p'></p> 
+子组件：<slot name='p'/>
+【子组件结构显示在哪个vue文件，就在哪个文件声明】
+【可以在子组件里再嵌套子组件】
+【标签模板有多个相同的时候，slot会分类，不会打乱结构】
+
+子组件访问slot接收的模板属性：
+this.$slots //对象
+【子组件页面slot的name值(p)变成了$slots的key值(p)】
+【没有设置slot的name,key值为（default）】
+key值都是vue虚拟dom节点,理解为一个对象
+
+操作slot中普通标签：
+【name的ul-list有横杠必须用['']包裹，没有则用.ullist或者['ullist']都可以】
+let ulDOM = this.$slots['ul-list'][0].elm; 
+
+操作slot中的组件对象:
+let twoCOM = this.$slots.two[0].componentInstance;
+访问组件的属性
+twoCOM.msg //为two组件data的msg
+
+访问父节点对象：this.$parent;
+（a,b为非父子关系，但是在App中a组件包裹着b组件，则b可以通过以上方式获取a。
+a想获取b，则用this.$slots(上面操作slot组件对象的方法)获取）
+
+以下两个等价：
+<input type="text" v-model="message">
+<input type="text" :value="message" @input="inputAction"/>
+
+transition组件包裹会显示以及隐藏的标签，并且设置name值
+自定义动画的class名字：[name]-enter
+在标签显示时,会添加class：
+            [name]-enter
+            [name]-enter-to
+            [name]-enter-active
+在标签隐藏时，会添加class：
+            [name]-leave
+            [name]-leave-to
+            [name]-leave-active
+
+多个元素执行动画:
+<transition name="ani"></transition>
+<box key='b'></box>(多个元素动画需要标识符key,值可以随便设置)
+<cox key='c'></cox>
+</transition>
+
+单个元素执行动画:
+【自己写动画】
+<transition name="ani"></transition>
+.ani-enter-active{ //显示
+    animation: 5s ani;
+}
+.ani-leave-active{//隐藏
+    animation: 2s ani2;
+}
+@keyframes ani {
+}
+@keyframes ani2 {
+}
+
+【使用animate.css动画】
+index.html引入css
+<transition enter-class="" enter-to-class="" enter-active-class="rotateIn animated"
+                leave-class="" leave-to-class="zoomOutDown animated" leave-active-class="">
+        <Box v-if="isShow" />
+</transition>
+
+路由：根据地址栏的url切换不同组件
+安装vue create  name(项目名字)
+选中router后执行就行
+
+app框架架构：
+0.    public 【放置静态资源css，images等】
+
+0.    src	 【以下】
+1.    	common 【公共组件】
+1.    	router>index.js  【 路由连接所有页面组件】
+1.   	pages>home>home.vue【页面组件】
+		    >hot>hot.vue	
+		    >discover>discover.vue
+		    >setting>discover.vue
+1.	App.vue 【主组件】<router-view/>是所有页面组件，<router-link to='路径'>相当于a标签，控制页面组件显示
+1.	main.js【全局配置】
+
+开始使用：
+1.在router.js 中引入组件
+
+2.配置路由：
+component：A（组件名字）
+path:'/path-a' (地址栏地址)
+	【有多个子路由】：
+	在父路由下：children:[{
+	component：box（组件名字）
+	path:'box' (地址栏地址)
+	}]
+	
+	【设置默认页面】：
+	方法一：alias:'/' 别名，弊端不能设置css
+	推荐方法二：{//重定向
+      			path:'**',
+      			redirect:'/Home'
+   		   },
+
+3.App.vue中 使用路由组件：
+页面组件：<router-view/> 
+控制页面组件：推荐使用：<router-link to='/path-a'>a</rputer-link>(可设置样式)
+
+	      可也用a标签：<a href='#/paht-a'>a</a>
+
+4.App.vue设置router-link的样式
+a{} 更改router-link的默认样式
+.router-link-active{} 点击后的样式
+
+
+5.公共组件：
+【把组件设为全局组件放在main.js中】
+1.在main.js 引入组件：import Header from './common/header'
+2.设置自定义全局组件：Vue.component('app-header',Header)
+3.其他页面都可以使用：<app-header></app-header>
+【需要改变值】用父传子的自定义属性方式，公共组件用props接收
+【页面需要为公共组件添加额外的组件】：
+页面在<app-header>标签加上需要的组件，会被公共组件覆盖，
+【解决方法】：slot，<app-header slot='a'>
+公共组件接收：<slot name='a'/>
+
+点击商品在详情显示商品名字：
+1.路由配置：在详情路由path:'Detail/:name/:id'   冒号代表是变量，名字可随取，可添加多个
+2.组件控制路由url拼接哈希值：<router-link :to="'/Home/Detail/'+goods.title+'/'+goods.id">
+3.详情组件获取：this.$route.params.name  获取商品名字，id用作发送ajax
+
+路由反向传值用非父子关系
+
+两种方式传值：
+params ：带#号的哈希值，必选参数
+query ：带?号的search，可选参数
+
+router：全局路由对象，用于操作路由,有方法
+route：取数据
+
+在vue实例作用范围内用：this.$router  
+作用范围外：router
+router.push（） 进入指定页面，有历史记录
+router.replace()  指定路径替换当前路径，当前路径不在历史记录中
+router.go()  跳转页面
+router.back() 返回页面
+router.forward() 前进页面
+
+布尔模式：
+router配置：props:true  //动态将路径中的参数作为组件的props
+取值不需要用$route.params了，直接用props:{name:string,id:string}
+
+对象模式：
+ router配置：props:{id:'001',name:'鞋子'} //固定写死值，给组件设置静态的props
+直接用props:{name:string,id:string}接收
+
+函数模式：
+ router配置：props:(route)=>({id:route.params.id，name:route.params.anme})
+直接用props:{name:string,id:string}接收
+
+mode:'history' 去除# 改为history模式，默认为哈希值模式
+
+页面切换方式：
+1字符串方式
+.app.vue的
+:to='Item.path'========等价==:to='{path：item.path}' router.push()也可以用
+data：path：'/home'，
+
+2.对象方式（写切换路径的时候写成对象的形式，叫编程式导航）
+router配置：name：'one',
+:to='{name：item.path}'
+data：path：'one'
+
+3.
+router配置：name：'detailName',
+:to="{name:'detailName',params:{name:goods.title,id:goods.id}}"
+
+4.router配置：name：'detailName',
+去掉router-link标签 和to
+添加单击事件传入item
+goDetail(item){
+      this.$router.push({name:'Detail',params:{name:goods.title,id:goods.id}})
+}
+
+【】封装组件项目配置【】：
+【创建文件夹说明】：
+api：配置URl文件
+assets：静态资源文件
+common：公共组件
+components：纯组件
+pages：页面组件
+router：路由文件
+services：请求数据文件
+utils：工具文件
+
+【公共组件配置】：
+1.写公共组件.vue输出到主文件index.js
+
+2.index.js引进所有公共组件，并使用install(Vue)方法输出到main.js（称为封装插件）
+
+3.main.js引进index.js(引入可省略直接写文件夹名字)，并use方法调用
+
+4.App.vue使用组件直接写组件标签名字
+
+5.页面就需要在路由文件配置，项目框架基本完成
+
+【获取数据】
+1.跨域：在package.json设置正向代理
+"vue": {
+    "devServer": {
+      "proxy": {
+        "/ajax": {//路径
+          "target": "http://m.maoyan.com",
+          "changeOrigin": true
+        }
+      }
+    }
+  }
+2.api模块 写url和接口并输出到Service（方便迭代，包括SAT开发url、UAT测试url、PRO生产url） 
+
+3.http模块 引入api和axios，server模块传来的请求进行配置，输出http（方便拓展请求）
+
+4.Service模块 引入api模块和http模块，向http模块传请求配置数据并得到返回结果，输出到页面组件
+
+5.页面组件引入Service模块，在created请求数据并得到返回数据
+
+【创建组件需要在内部用一个div标签包裹】
+【公共组件只写标签名字即可使用<tabs></tabs>
+【子组件先import引入，components声明，再用组件标签名字 <playing/>
+【子路由先路由配置，组件中路由标签<router-view/>使用
+
+
+movice主页面布局：
+1.content公共组件标签分别加在playing、coming组件，这两页面import引进service请求组件
+2.movie页面组件import引进playing、coming组件
+
+JS获取属性用.和[]的区别
+1、中括号法可以用变量作为属性名,而点方法不可以;
+2、中括号法可以用数字作为属性名,而点语法不可以;
+
+刷新滚动视图方法：refresh()
+
+动态数据传值获取值方法：
+props:{name:string}
+data(){
+return{myname:''}
+}
+watch:{
+name:function(newVal){
+this.myname=name
+}
+}
+
+vuex:专为 Vue.js 应用程序开发的状态管理模式（理解为管理vue全局数据）
+特点：多个视图依赖于同一状态。
+来自不同视图的行为需要变更同一状态
+
+state：放置全局数据
+getters：全局计算属性
+actions：修改数据 触发用dispatch
+mutations：直接修改state值 触发用commit
+
+mapState是vuex里面的方法，import引入需要加{mapState}
+mapState：将全局属性转为组件的计算属性：
+数组方式：computed:mapState(['a','b'])
+对象方式(可更换名字)：computed:mapState({numA:'a',numB:'b'})
+函数方式（可计算全局的值）：computed:mapState({all:(state,getters)=>{return a+b}})
+
+mapActions:将全局的actions转为组件的methods
+mapMutations:将全局的mutations转为组件的方法
+既有组件自己的计算属性，又有全局属性的计算属性方法：
+computed:{
+ my(){return a+b}
+ ...mapState({})
+}
+
+
+
+获取数据：
+组件通过this.$store.state访问全局数据
+
+修改数据：
+组件触发actions：
+this.$store.dispatch('name','传递参数') //name为action名字
+
+【actions】接收再传给mutations修改：
+//context:当前所在上下文环境，params:接收参数
+name(context,params){
+content.commit('data',params)//data为mutations名字
+}
+
+【mutations】修改数据:
+data（state，params）{
+state.params=params
+}
+
+【getters】计算数据：
+count（state，getters）{
+state.a+state+b
+}
+
+vuex使用模块开发：
+其他模块输出：export default{}，设置命名空间：namespaced:true 还需请求数据的vue文件加一个路径 (只获取修改本模块的值，不加会获取全部模块的值)
+index.js模块引入：import
+index配置模块：modules:{name:modulename}
+
+组件：
+1.import {mapState, mapActions, mapMutations} from 'vuex'
+2.computed: {
+        ...mapState({
+            address: state=>state.location.city
+        }),
+    },
+3.methods: {
+        ...mapActions({
+            setLocation: 'location/setLocation'
+        }),
+   }
+
+路由懒加载：
+不用import导入
+component:()=>import('./about.vue')
+
+导航守卫：
+改为路由声明：const router=new Router({})
+//to：将要进入的路由路径信息
+//from:将要离开的路由路径信息
+//1.next:下一步操作，
+//2.next（false）不进入
+//3.if 判断next('/text') 重定向 
+全局守卫：router.beforeEach((to,from,next)=>{})
+输出：export default router;
+
+执行顺序按一下进行：
+导航被触发
+离开守卫：beforeRouterLeave()  离开页面 离开触发
+全局守卫：beforeEach((to,from,next)=>{})	相同的全局守卫按顺序执行
+更新守卫：beforeRouterUpdate
+独享守卫：beforeEnter
+解析异步路由组件
+组件内部守卫：beforeRouteEnter
+全局解析守卫：beforeResolve	
+导航被确定，可以进入
+路由后置钩子：afterEach
+触发DOM更新(beforeCreate...等等钩子函数)
+调用组件内部守卫beforeRouterEnter传给next回调函数（在组件内部守卫next还可以传函数）
+beforeRouterEnter((to,from,next)=>{
+next((com)=>{
+//com为当前的组件对象
+})
+})
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,58 @@
+安装webpack
+全局安装:
+>npm i webpack -g	（webpack工具）
+>npm i webpack-cli -g （webpack4.X版本才需要，为了识别cmd的webpack命令）
+>npm i webpack-dev-server -g （搭建本地服务器）
+
+新建webpack文件夹
+>npm init
+
+本地安装：
+>npm i webpack -D
+>npm i webpack-cli -D 
+>npm i webpack-dev-server -D
+
+
+新建：
+根目录：webpack.config.dev.js 开发配置
+	webpack.config.build.js 生产配置（简化编译命令）
+	
+开发配置内容（生产配置只需改mode:'production'）：
+const path = require('path'); 	//引进路径
+module.exports = {
+    mode: 'development', 	//开发模式
+    entry: {		//需编译的入口文件，可以添加多个
+        index: './src/index.js', 	//main、plugin改了名字，输出到dist的文件就是什么名字
+        plugin: './src/plugin.js'
+    },
+    output: {	//编译好的文件输出路径
+        path: path.resolve(__dirname, 'dist'),//规范路径
+        filename: '[name].js'
+      //filename: '[name]_[hash:20].js'  //添加哈希值，更新文件名，用于清除缓存，最大值为20
+    }，
+  这里还有处理css,js,images,的module
+}
+
+配置好后在package.json 添加快捷命令(为了简化编译命令)：
+"dev": "webpack --config webpack.config.dev.js",
+"build": "webpack --config webpack.config.build.js"
+
+根目录：index.html （需要引进dist编译后的文件）
+根目录：src文件夹
+src目录下：js、css、imgages等放这目录下
+src目录下有一个主要的index.js 文件，要引入其余的js，css等文件，这些文件就不用再index.html里面引进了
+如果有css文件则安装：npm i css-loader style-loader -D
+如果有图片则安装:npm i url-loader -D
+如果js有ES6则安装:npm i babel-loader @babel/core @babel/preset-env -D
+之后全部要在配置文件进行配置
+
+开发环境项目运行整个流程：
+输入命令npm run dev（主动）
+src目录下主文件引进其他文件（自动）
+src目录下编译文件到dist目录下（自动）
+index.html引进dist目录文件（自动）
+渲染到页面
+
+
+
+

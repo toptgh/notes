@@ -1,0 +1,135 @@
+url组成：协议protocol、域名hostname、端口号host、页面路径pathname、?查询串search、#哈希值hash
+
+1，标准分界标示符<?php ?>
+2，简写分界符<?  ?>
+3，<%  %>
+变量$name='name
+输出echo ‘名字叫：’.$name  点表示连接符
+print 只能输出一行字符串 返回值为1 有返回值 效率低
+索引数组：$arr=array(1,2);
+打印数组：print_r($arr)
+遍历数组：for($i=0;$i<cound($arr);i++){
+	echo $arr[$i];
+}
+	foreach($arr as $value){
+	each $value;
+}
+关联数组：$arr=array('name'=>'tom');
+print_r($arr);
+二维索引数组：$arr=array(array(1,2),array(4,5));
+二维关联数组：$arr=array(array('name'=>'tom'));
+处理中文header（‘content-type:text/html;charset=utf-8’）;	
+
+数据库增删改查：
+增：insert into user(name) values ('tom');
+删：delete from user where id=1;
+改：update `user` set `name`="tom" where id=2
+查：select * from user
+
+一个汉字最终编码后的字符长度为9个字符
+get和post区别：
+get：	URL数据大小长度（由浏览器和服务器处理能力决定）
+	数据通过URL传递
+	因为放在url 所以数据不够安全
+	传输速度快
+
+post：	理论上是无限的
+	数据放在请求主体中
+	数据相对安全
+	传输速度相对较慢
+
+ajax实现无刷新更新数据。但无法退回到上步操作
+1.创建对象：  var xhr=new XMLHttpRequest();
+2.与服务器建立连接	xhr.open(get/post,url,true)
+3.向服务器发送数据	xhr.send()
+4.服务器处理数据，并将结果返回到客户端	
+xhr.onreadystatechage=function(){
+	if(xhr.readyState==4&&xhr.status==200){
+	xhr.responsetext;
+}
+}
+
+一、同源策略
+在ajax请求服务器文件时，保证 协议、域名、端口号完全一致的情况下，才可以访问服务器数据
+同源策略是浏览器的一个行业标准。保证用户使用该浏览器时数据的安全性。
+跨域：在一个域下访问另一个域下的数据
+
+实现跨域访问数据：jsonp 
+jsonp 是ajax的一种访问格式，通过这种数据访问格式 可以实现跨域访问数据
+jsonp跨域原理：
+      1、动态创建一个script标签，添加到body中
+      2、设置script标签的src属性值，属性值就是一个接口
+      3、通过接口上的某个参数，向服务器传递一个函数，通过
+          这个回调函数 接收服务器返回的数据
+   通过jsonp格式获取的服务器数据 大多都是object类型，不需要转换
+
+cors跨域
+用户服务器的跨域请求数据
+   php中设置头信息
+   header("Access-Control-Allow-Origin:*");//允许所有请求跨域访问该接口
+
+promise对象跨域
+
+
+console.dir(fn); 查看fn这个函数的属性
+fn.name 为“fn”
+fn.arguments 为传入实参个数  arguments 不是一个 Array 对象 是伪数组
+fn.length	为形参的个数
+
+js没有类，但是可以通过构造函数实现
+类是对象的抽象，对象是类的实例
+面向对象(一种高级的编程思想)：
+    好处：变量私有化，防止命名空间的污染，各个功能独立，便于维护
+    缺点：代码变多，开发周期变长，成本增加
+面向过程：体现的是数学逻辑
+面向对象：体现的是生活逻辑
+
+构造函数中的this指向构造函数new出来的实例化对象
+原型方法中的this指向构造函数new出来的实例化对象
+定时器中的this指向window对象
+在事件中的this指向事件的触发者
+如果在定时器或事件中调用构造函数new出来的属性或方法时要改变this指向
+严格模式下的this，this是undefined
+箭头函数中的this:变身没有this，继承父级
+改变函数内部的this指向：
+例子：var name = 'xiaolan';
+        var obj = {
+            name: 'xixi',
+            age: 18,
+            fn: function(name, age) {
+                console.log(this.name);
+                console.log(name);
+                console.log(age);
+            }
+        }
+谁直接调用指向谁：obj.fn();  fn里面的this指向obj  //xixi undefined undefined
+call 立即执行：obj.fn.call(window,['张三', '18']);fn里面this指向window //xiaolan ['张三', '18'] undefined
+apply 立即执行：obj.fn.apply(window,['张三', '18']); fn里面的this指向window //xiaolan 张三 18
+bind 不会立即执行 返回新的函数：obj.fn.bind(window, '张三', '18');  fn里面的this指向window //不输出
+var get = obj.fn.bind(window, '张三', '18'); get(); 赋值变量，调用执行，如果在get（）传实参，则不会传入 //xiaolan 张三 18
+
+闭包的作用：
+    可以访问一个函数内部的私有变量
+    通过闭包，可以延长一个局部变量的生命周期
+
+
+静态方法： 加在函数上的方法
+
+给JQ方法拓展 
+$.extend()（给JQ对象实例添加方法） 
+传多个参数则合并为一个对象：$.extend(true, obj, obj2); ture是深拷贝，改变不影响原来对象
+只传一个参数，相当于把对象合并到jQuery的对象：给JQ对象实例添加
+ $.fn.extend()（ 给JQ原型prototype添加方法）ES6：Object.assign
+
+typeof 运算符返回一个用来表示表达式的数据类型的字符串
+对象,数组和null：typeof(x) = "object" 
+函数：typeof(x) = "function" 
+instanceof来检测某个对象是不是另一个对象的实例
+描述：instanceof 运算符用来检测 constructor.prototype 是否存在于参数 object 的原型链上。
+
+
+Function的__proto__指向其构造函数Function的prototype；
+Object作为一个构造函数(是一个函数对象!!函数对象!!),所以他的__proto__指向Function.prototype；
+Function.prototype的__proto__指向其构造函数Object的prototype；
+Object.prototype的__prototype__指向null（尽头）；
+

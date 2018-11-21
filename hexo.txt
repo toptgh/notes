@@ -1,0 +1,15 @@
+查看版本：hexo -v 
+npm install hexo-cli -g
+初始化：hexo init
+安装依赖：cnpm i
+本地启动：hexo s
+修改_config.yml文件
+type：git
+repo：仓库地址
+branch：master
+
+创建文章：hexo new ''标题''
+清除缓存：hexo clean
+生成静态：hexo g
+本地启动：hexo s
+项目部署：hexo d

@@ -1,0 +1,255 @@
+orientationchange  屏幕旋转
+resize 屏幕宽高改变
+设置边框1px两种方法：
+1.设置伪类.item:after{
+	content:'';
+	position:absolute;
+	left:0;
+	bottom:-1px; (定位改为top)
+	display:block;
+	width:100%;
+	height:1px;
+	boeder-bottom:1px solid #ccc;（边框改为top）
+	background:transparent;
+	transform:scaleY(0.5);
+}
+2.meta缩放页面为0.5
+
+谷歌安卓浏览器字体大小限制都是12px 因为都是webkit内核
+方法1.突破浏览器最小字体限制：transform: scale(0.5);（缩放10像素）transform-origin:top left;(设置原点位置)
+问题：原本空间没有缩小，标签里面的其他元素也会被缩放
+方法2.meta页面缩放0.5
+
+meta页面缩放0.5可以同时解决1px边框问题和突破浏览器最小字体限制，rem还是以下两种方法一样进行
+
+
+方法一：JS转化rem  
+<!-- <script>
+          function resizeFontsize(){
+              var width=document.documentElement.clientWidth;
+              document.documentElement.style.fontSize=width/7.5+'px';//设计稿宽除以100
+          }
+          resizeFontsize();
+          window.addEventListener('orientationchange',resizeFontsize);
+          window.addEventListener('resize',resizeFontsize);
+      </script> -->
+.item{
+    padding-top: 0.2rem;//设计图padding-top的宽度除以100
+}
+
+方法二：预编译SCSS
+<!-- <script>
+          function resizeFontsize(){
+              var width=document.documentElement.clientWidth;
+              document.documentElement.style.fontSize=width/10+'px';//直接除以10
+          }
+          resizeFontsize();
+          window.addEventListener('orientationchange',resizeFontsize);
+          window.addEventListener('resize',resizeFontsize);
+      </script> -->
+
+@function pxrem($px){
+    @return $px/75+rem;//设计图宽度除以10
+}
+.item{
+    padding-top: pxrem(20);//设计图多少写多少
+}
+
+
+弹性盒：
+父级：display:flex;
+Webkit 内核的浏览器，必须加上-webkit前缀。
+设为 Flex 布局以后，子元素的float、clear和vertical-align属性将失效。
+
+
+主轴排列方向：flex-direction  
+横向：row 
+反转：row-reverse
+纵向：column
+
+主轴对齐方式：justify-content
+■ flex-start默认，顶端对齐
+■ flex-end末端对齐
+■ center居中对齐
+■ space-between两端对齐，中间自动分配
+■ space-around自动分配距离
+侧轴对齐方式：align-items
+stretch	默认值。项目被拉伸以适应容器。
+center	项目位于容器的中心。
+flex-start	项目位于容器的开头。
+flex-end	项目位于容器的结尾。
+baseline	项目位于容器的基线上。
+
+flex-wrap 属性规定flex容器是单行或者多行
+nowrap	默认值。规定元素不拆行或不拆列。
+wrap	规定元素在必要的时候拆行或拆列。
+wrap-reverse	规定元素在必要的时候拆行或拆列，但是以相反的顺序。
+
+flex-flow属性是flex-direction属性和flex-wrap属性的简写形式，默认值为row nowrap。
+
+
+弹性子元素属性：
+order	用整数值来定义排列顺序，数值小的排在前面。可以为负值，默认为0。
+
+中间自动分配：flex：1；overflow:scroll;
+banner图100%宽：父级div width:100%;overflow:hidden; 图片：width:100%;
+
+swiper: 
+direction: 'vertical', 轮播方向
+initialSlide: 0,	初始化显示轮播图为第几张
+loop: true,	循环轮播
+
+自动轮播
+autoplay: { 
+delay: 1, 轮播时长
+},
+
+speed: 3000, 轮播速度
+pagination: '.swiper-pagination', 小圆点分页器
+
+mySwiper.update();// 更新轮播视图
+                
+mySwiper.reLoop();// 重新设置循环
+
+mySwiper.slideTo(1, 0);// 跳转到真正的第一页
+
+// 重用的属性（循环轮播会出现）
+// console.log(mySwiper.activeIndex);活动的索引
+// console.log(mySwiper.realIndex);真实的索引
+
+swiper动画：
+先引进swiper插件
+1.在div标签的class属性里面添加 ani、animated
+2.在div标签里添加属性：
+swiper-animate-effect="myAni" 动画名称 
+	（1）使用animate.css做好的动画：直接把动画名称粘贴上
+	（2）使用自己做的动画：.myAni{animation-name: 名称;} @keyframes 名称{0%{}100%{}}
+swiper-animate-duration="1s"	动画时长
+swiper-animate-delay="0.5s"	动画延迟
+
+3.在js的swiper函数添加：
+每次初始化重新加载动画
+	on:{
+            init: function(){
+                    swiperAnimateCache(this); //隐藏动画元素 
+                    swiperAnimate(this); //初始化完成开始动画
+            }, 
+            slideChangeTransitionEnd: function(){ 
+                    swiperAnimate(this); //每个slide切换结束时也运行当前slide动画
+                    //this.slides.eq(this.activeIndex).find('.ani').removeClass('ani'); 动画只展现一次，去除ani类名
+            } 
+        }
+
+
+水平垂直居中：
+1.兼容性：,IE7及之前版本不支持 【margin:auto实现绝对定位元素的居中】
+父级div: position:relative
+子级div: position:absolute; top:0; right:0; bottom:0; left:0; margin:auto;
+
+2.推荐 【margin 负间距】
+父级div: position:relative
+子级div: position:absolute; top:50%; left:50%; margin-top:负高的一半；margin-left:负宽的一半
+
+3.兼容性：IE8不支持 【Transforms 变形】
+position:absolute;
+            left:50%;    /* 定位父级的50% */
+            top:50%;
+            transform: translate(-50%,-50%); /*自己的50% */
+4.弹性盒
+父级：display:flex;
+             justify-content:center;
+             align-items:center;
+
+
+移动端整体页面使用弹性布局有兼容性，推荐使用绝对定位
+ios的上下nav统一为49px
+以下为内容和下nav组成
+html,body{width:100%;height:100%}
+
+方法一：.page{
+width:100%;
+position:absolute;
+top:0;
+left:0;
+bottom:49px；
+}
+
+方法二：.page{
+width:100%;
+height:100%;
+padding-bottom:49px;
+box-sizing:border-box;}
+
+footer{width:100%;
+height:49px;
+position:absolute;
+left:0;
+bottom:0;}
+
+nav布局方式：
+给nav设为弹性盒子：nav{display:flex}
+nav的li为：li{flex：1;}
+
+
+iscroll: 
+布局使用绝对定位
+内容盒子不设高度且为overflow：hidden （以前使用overflow：“auto”实现滚动）
+内容盒子下要使用一个div作为内容容器
+
+引入插件iscroll.js
+var myScroll=new IScroll('.content',{ })
+bounce 弹簧效果
+click pc端点击事件，默认false
+tap 移动端点击事件，默认false（手机端点击有300毫秒延迟）
+scrollbars 显示滚动条
+搭配fadeScrollbars 不滚隐藏，滚显示
+
+startX：0  初始位置
+scrollX: 是否可以滚动，x默认false y默认true
+
+属性：
+对象：myScroll
+
+方法：
+更新长度：myScroll.refresh()
+
+事件：
+myScroll.on('事件'，function(){})
+开始按住：beforeScrollStrart
+按住再松开：scrollCancel
+开始滚动：scrollStart
+滚动松开：scrollEnd
+滚动中：scroll默认关闭，使用需引入iscroll-probe.js  配置probeType:1/2/3 数值越大探测越深，耗能越大
+
+滚动到指定位置：
+myScroll.scrollTo(x,y,时间)
+
+超出部分显示...
+white-space: nowrap; 文本强制不换行；
+
+text-overflow:ellipsis; 文本溢出显示省略号；
+
+overflow:hidden; 溢出的部分隐藏；
+
+
+css实现横向滚动页面
+<ul>
+<li></li>
+</ul>
+ul{
+overflow:scroll;
+white-space:nowrap;
+}
+li{
+display:inline-blcok;
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,336 @@
+JS代码不要超500行
+一般最大为200-300
+一个函数为当前屏幕长度
+要语义化
+注释写在函数前面
+全局变量要注释做什么的
+
+
+一个JS文件就是一个模块，相互不能访问
+如b.js要访问a.js
+则a.js需提供一个输出接口：module.exports={输入内容} (建议输出为对象)
+b.js需要引入接收：var aModule = require('./a.js');  console.log(aModule);
+a.js没有提供输出接口Module时，b.js又打印了aModule，则输出为{}空对象
+输出和引入被称之为commonJS规范
+模块化开发是node.js独有的
+
+模块化：
+相对路径路径：仅在require方法使用 其他路径照常
+代表当前文件夹：./a.js	(文件后缀可省略./a，默认先找文件夹，然后.js.json等)(index.html可以省略)
+绝对路径本地或者服务器的根目录：/a.js
+依赖路径：直接写文件名 a.js	（依赖路径省略和gulp一样）
+node内置模块：fs
+require引入需要注意：require第一次代码执行，之后不执行了，之后的require的结果，取第一次的缓存。
+
+fs模块：
+const fs = require('fs');
+
+异步读文件：fs.readFile('hello.txt',function(error,data){
+	console.log(data.toString());或者（data+''）//不转为字符串data为二进制 cmd中为了显示简洁转为16进制
+})
+同步：let result=fs.readFileSync('hello.txt');
+
+写文件：（会覆盖以前的内容）
+ fs.writeFile('helloworld.txt', 'hello world', (error)=>{
+     console.log(error);
+ });
+fs.writeFileSync('helloworld.txt', 'hello world');
+
+追加文件内容（不会覆盖）
+fs.appendFile('helloworld.txt', 'hello world', (error)=>{
+     console.log(error);
+ });
+fs.appendFileSync('helloworld.txt', 'hello world');
+
+// 删除文件
+// fs.unlink('helloworld.txt');
+
+// 重命名文件
+// fs.rename('helloworld.txt', 'hello.txt');
+
+
+// 读文件状态
+// let result2 = fs.statSync('C:/Users/qf/Desktop/a.rar');
+// console.log(result2);
+// result2.mode =33206是文件  
+// result2.mode =16822是文件夹  
+
+// console.log(result2.isDirectory());//判断是否为文件夹
+// console.log(result2.isFile());//判断是否为文件
+
+
+url模块：
+const url = require('url');
+
+// url对url字符串进行解析
+let path='www.baidu.com'
+let result = url.parse(path, true);
+console.log(result);//URL对象
+// 参数1：需要解析的路径，
+// 参数2：是否解析请求参数为对象(可选)
+
+
+//url对象组装为一个url可请求的字符串
+// let result2 = url.format(pathObj);
+// console.log(result2);
+
+
+querystring模块:
+const qs= require('querystring');
+解析:
+// 对请求参数进行解析
+const queryStr = 'username=zhangsan&password=123456&age=6&age=8';
+let result1 = qs.parse(queryStr);
+console.log(result1);
+
+对对象转为请求参数的字符串
+// let result2 = qs.stringify(queryObj);
+
+ querystring可以对特殊字符进行编解码
+编码：let result3 = qs.escape('上海');
+解码：let result4 = qs.unescape('%E4%B8%89%E9%98%B6%E6%AE%B5'）
+
+
+const http = require('http');  //http请求默认端口是80
+const https = require('https');  //https请求默认端口是443
+
+
+// 判断字符串是否有指定的子字符串为前缀
+str.startsWith('www');
+// 判断字符串是否有指定的子字符串为后缀
+str.endsWith('com');
+// 判断字符串是否有指定的子字符串
+str.includes('baidu');
+
+/*
+跨域解决方式：
+    1.jsonp
+    2.后台允许跨域，注意安全问题。允许指定域名跨域
+    3.正向代理
+
+    项目开发的环境（服务器）：
+    开发环境 SAT
+    测试环境 UAT
+    生产环境/线上环境 PRO
+
+*/
+
+正向代理: 客户端需要对目标服务器发送请求,会存在跨域的问题，客户端向代理服务器发送请求，不会有跨域的问题。解决跨域：客户端向代理服务器，由代理服务器转发请求给目标服务器，代理服务器得到结果告诉客户端。
+代理的是客户端
+http-proxy-middleware 正向代理中间件
+反向代理？代理的是服务器
+
+我们常说的代理也就是只正向代理，正向代理的过程，它隐藏了真实的请求客户端，服务端不知道真实的客户端是谁，客户端请求的服务都被代理服务器代替来请求，某些科学上网工具扮演的就是典型的正向代理角色。用浏览器访问 http://www.google.com 时，被残忍的block，于是你可以在国外搭建一台代理服务器，让代理帮我去请求google.com，代理把请求返回的相应结构再返回给我。
+
+反向代理：隐藏了真实的服务端，当我们请求 www.baidu.com 的时候，就像拨打10086一样，背后可能有成千上万台服务器为我们服务，但具体是哪一台，你不知道，也不需要知道，你只需要知道反向代理服务器是谁就好了，www.baidu.com 就是我们的反向代理服务器，反向代理服务器会帮我们把请求转发到真实的服务器那里去。Nginx就是性能非常好的反向代理服务器，用来做负载均衡。
+两者的区别在于代理的对象不一样：正向代理:代理的对象是客户端，反向代理:代理的对象是服务端。
+
+使用node实现正向代理
+
+ws  即时聊天功能
+
+
+使用插件实现服务器功能：
+//安装express插件流程：新建文件夹，npm init, cnpm i express -S和cnpm i body-parser -S
+
+//使用流程：require引入插件 express()创建服务器 listen启动服务器
+//get/post处理客户端请求和处理参数（get接收参数用query，post接收参数需要插件body-parser，直接获取body为undefined）
+//end()结束响应 
+
+//处理/get/post请求和参数具体流程：
+//接收客户端默认根目录请求，响应回去html页面，请求结束。JS发送ajax请求带参数，获取请求参数，响应回去成功，结束。
+
+send（）方法包含写入和end()结束
+
+插件express的use()方法：参数一是URL，参数二是处理函数
+use('/',(req,res,next)=>{}) //req客户端传入的参数 res响应客户端 next是一个函数，指向下一个操作函数。如果调用了next()下一个函数就会执行
+use过滤请求路径的规则：
+请求路径只要以参数1为开头的路径就可以匹配。参数1匹配按路径一节为单位，
+参数1省略，或'/', 或'*' 都是匹配所有的路径
+/*
+如果请求的路径是：/api/goods/detail
+那么可以拦截到请求的use方法，url是以下几种情况：
+server.use();
+server.use('*');
+server.use('/');
+server.use('/api');
+server.use('/api/goods');
+server.use('/api/goods/detail');
+*/
+中间件会对请求的url进行切割, 执行next后，url又是完整的。
+
+中间件：use方法使用中间件 参数一是URL，参数二是处理函数，叫做中间件
+（可以理解为在一个JS封装了一个函数,然后输出，另一个JS文件引进use方法参数二调用）
+使用中间件：1.以上是自己封装使用中间件的方法
+	    2.下载第三方插件http-proxy-middleware，引进后直接放use参数二使用
+
+__dirname当前文件夹的绝对路径
+__filename当前文件的绝对路径
+
+读取一个路径下的所有文件夹和文件，并转为对象
+const fs = require('fs');
+function readDirInfo(path){
+    let obj = {};
+   // 读文件夹的所有文件
+    let result = fs.readdirSync(path);
+    result.map((item, index)=>{
+        // console.log(item);
+        let fullpath = path + '/' + item;
+        
+        // 读取每一个文件或文件夹的信息
+        let stat = fs.statSync(fullpath);
+        if(stat.isDirectory()){
+            //是文件夹
+            obj[item] = readDirInfo(fullpath);
+
+        }else if(stat.isFile()){
+            // 是文件
+            console.log(fullpath);
+            obj[item] = true;
+        }
+    });
+
+    return obj;
+
+};
+let res = readDirInfo('D:/三阶段/1808/day1023');
+console.log(res);
+fs.writeFile('data.json', JSON.stringify(res), ()=>{});
+
+使用路由处理请求：（路由）
+引入路由对象
+const server = express(); 服务器
+// 1.处理静态资源文件的请求（css/js/images...）
+// 参数1：所有静态资源请求url的开头
+// 参数2：express提供的处理静态资源的中间件，需要接收参数为：静态资源存放的目录
+server.use('/static', express.static('public'));
+
+// 2.处理ajax请求(路由)
+server.use('/api', ajaxRouter);
+
+// 3.处理页面请求(路由)
+server.use('/', htmlRouter);
+
+监听服务器
+
+输出server
+
+中间件模块：创建路由对象，路由get请求 输出路由对象
+
+前后端不分离：利用模板引擎在后端把数据渲染到HTML页面，然后把完整HTML页面发给客户端
+使用模板引擎ejs：
+下载ejs插件
+const ejs = require('ejs');
+// 参数1：固定字段
+// 参数2：模板引擎的名字,模板文件的后缀
+server.set('view engine', 'html');
+// 在response对象中，可以调用render方法渲染模板，或者最终的html代码
+// 模板默认存放在views文件夹中
+
+// 设置模板存放的目录
+// 参数1：固定字段
+// 参数2：路径
+server.set('views', './www');
+
+// 设置html模板引擎(后缀原来为ejs,设置后为HTML,其实用的还是ejs的功能)
+server.engine('html', ejs.__express);
+
+中间件处理数据到HTML页面 数据必须为对象
+ejs语法:<%%>处理JSfor循环等
+<%=%>处理变量
+<%-include()%> 引进页面
+
+mongodb数据库使用
+执行命令：
+设置路径：mongod --dbpath=数据库数据的存放路径 --port=27017
+连接数据库：mongoose.connect('mongodb://localhost:27018', {useNewUrlParser: true}, (error)=>{}）
+1.在项目新建文件夹为db
+2.在mongodb安装目录cmd打开窗口 输入modgod --dbpath=db文件夹的路径 --port=27018(默认为27017)
+3.启动服务器。
+必须执行以上步骤才能开启成功 命令窗口不能关。
+数据库可视化按ctrl+R 刷新
+
+数据增删改查
+创建表格字段：const schema=new mongoose.Schema({})
+创建操作数据库表格模型：const student=mongoose.model('student',schema)
+
+// 新增数据
+    // let studentInfo = new Student({
+    //     name: '张三',
+    //     age: 10,
+    //     sex: '男'
+    // });
+studentInfo.save((error, info)=>{})
+
+
+查询
+ // 查询所有
+Student.find((error, result)=>{})
+
+// 查询总数
+Student.countDocuments((error, result)=>{}）
+
+// 按条件查找1：
+Student.where({name: '张三'}).find((error, result)=>{})
+Student.where({name: '张三'}).countDocuments((error, result)=>{})
+ $gt  大于
+    $lt  小于
+    $gte 大于等于
+    $lte 小于等于
+    $ne 不等于
+    $regex  正则
+    $or  或
+//查找年满18周岁,低于60岁
+    Student.find({age: {$gte: 18, $lt: 60}}).then((result)=>{}）
+// 查找姓李的
+    let reg2 = new RegExp(/^李/);
+    Student.find({name: {$regex: reg2}}).then(result=>{}）
+// 排序 -1降序   1升序
+    Student.find().sort({age: -1}).then((result)=>{}）
+
+// skip(num)跳过前面多少条数据开始查询   (page-1)*count
+    // limit(num)需要多少条数据的长度        count
+    Student.find().skip(4).limit(2).then((result)=>{}）
+
+// 按照条件查找2:
+Student.find({name: '张三'}, (error, result)=>{})
+
+ // 查找一个
+// Student.findOne({name: '张三'})
+// Student.where({name: '张三'}).findOne((error, result)=>{})
+
+// 根据id查询
+// Student.findById('5bd28a2c23366a108071ad91', (error, result)=>{})
+
+
+// 修改，更新
+//修改第一个
+    // Student.updateOne({name: '王五'}, {age: 66})
+    // Student.findOneAndUpdate({name: '王五'}, {age: 66})
+    // Student.update({name: '王五'}, {age: 66}, (error, result)=>{})
+
+ // 修改多个
+    // Student.updateMany({name: '张三'}, {sex: '女'}, (error, result)=>{})
+
+// 根据id修改
+    Student.findByIdAndUpdate('5bd28ad600838d100cea5fe6', {name: "赵六", sex: '男'}, (error, result)=>{})
+
+
+删除
+// 删除满足条件的所有数据
+    // Student.remove({name: '张三'}, (error, result)=>{})
+
+// 删除一个
+    // Student.findOneAndRemove({name: '王五'}, (error, result)=>{
+
+// 根据id删除
+    // Student.findByIdAndRemove('5bd28a2c23366a108071ad91', (error, result)=>{
+
+
+
+
+
+
+
+
+

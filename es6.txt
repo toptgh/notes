@@ -1,0 +1,163 @@
+promise：
+
+//执行时先输出同步的，异步在最后输出
+const promise =new Promise(（resolve,reject）=>{}）
+resolve或者reject只能有一个结果 如果是resolve那么reject就不执行了 并且resolve只能执行一次
+.then(Promise.resolve(3))
+then 方法接受的参数是函数，而如果传递的并非是一个函数，它实际上会将其解释为 then(null)，这就会导致前一个 Promise 的结果会穿透下面。
+
+// 异步处理
+    处理成功。调用手动resolve
+    处理失败。调用手动reject
+    代码错误，自动调用reject
+
+//使用场景
+    多个回调嵌套 （回调地狱：函数层层嵌套）
+    多个模块之间，需要异步处理后传值
+
+// 第一步，第二步，都是异步处理。并且需要依次执行
+new Promise((resolve, reject)=>{
+    console.log('第一步');
+    resolve();
+})
+.then(()=>{
+    return new Promise((resolve, reject)=>{
+        console.log('第二步');
+        resolve();
+    })
+})
+
+// 第一步，第二步，第三步，都是异步处理。并且需要同时执行，却要获得最终结果
+Promise.all([p1, p2, p3]) 
+.then(()=>{})	//不管成功还是失败都会输出全部结果
+
+Promise.race([p1, p2, p3])
+.then(()=>{})	// 并发异步操作,谁先完成结果就是谁的
+
+
+
+
+字符串：
+//查找：返回布尔值 必须开头字符串顺序一样才是true
+str.startsWith('') 开头查找 
+str.endsWith('')  尾部查找
+str.includes('') 全部包含
+
+//模板字符串：可以包含回车，变量以'${}'插入，可读性高
+`${}`    
+'\' 不保留空格回车，拼接成一行
+`` 保留空格回车，保持原样
+
+数组：
+// 数组解构
+// 按数组下标解构，如果超出数组长度，为undefined
+let arr = [1,2,3,4];
+let [a1, a2, a3, a4] = arr; //[1,2,3,4]  a1等不是数组而是相当于声明了一个变量 
+
+//数组扩展运算符 数组深拷贝
+(...arr) //1,2,3,4 去掉[] 逗号保留
+
+// 数组新增的方法
+map循环遍历 item为元素 index为索引， return 元素和索引， 返回元素和索引
+let arr=arr.map((item,index)=>{}) 
+
+find 遍历查找需要的值 ，return 条件语句 找到只返回一个值，后面不查找
+let arr=arr.find((item,index)=>{}) 返回需要的item 
+let arr=arr.findIndex((item,index)=>{})  返回需要的index
+
+filter 过滤
+let arr=arr.filter((item,index)=>{}) 返回符合的值
+
+对象：
+// 拷贝多个对象的属性： 
+1.Object.assign（）对象深拷贝
+2.JSON.parse(JSON.stringify())
+3{...}
+参数1：目标对象，其他参数：源对象
+返回值：目标对象
+// 将多个对象的值合并给第一对象，属性如果有重复的，后面的值会覆盖前面的
+let result = Object.assign( {}，obj1, obj2, obj3);
+
+// 对象简写方式
+对象的键和值一样时。可以写成一个 name:name写成name
+
+函数：
+//箭头函数:
+标准：var add=(a,b)=>{return a+b}
+函数体里只有一个return时简写：var add=(a,b)=>(a+b)
+只有一个形参时：var add=a=>{}
+多个参数，没有参数都不能省略()：var add=()=>{}
+
+// 箭头函数this指向上下文
+// 普通函数谁调用指向谁
+// 箭头函数通常用于回调函数
+
+// 函数的剩余参数：...rest
+function testFun(name, age, ...rest){
+    console.log(rest);	//['c','d']
+    console.log(name);//a
+    console.log(age);//b
+}
+testFun('a', 'b', 'c', 'd');
+
+
+Class:
+//类方法Object.assgin  Array.from    对象方法arr.map  arr.find
+//声明一个类
+class Person{
+    // 构造函数
+    constructor(name){
+        //this指向类创建的实例对象
+        this.name = name;
+    }
+    say(){
+        console.log(`my name is ${this.name}`);
+    }
+}
+//实例对象
+let zhangsan = new Person('张三'); 
+
+
+// 继承
+class Man extends Person{
+    //继承得到父类的所以属性和方法(类方法对象方法都可以继承)
+    //默认指向父类的：
+     constructor(name){
+        super(name);  //重写了构造函数，必须调用super
+     }
+
+}
+
+let：只能在当前代码块里面使用
+{代码块 }
+
+
+ES6模块化：
+// es6默认输出内容：export default{}
+
+//es6引入默认模块：import person from './person'
+
+// 修改引入指定输出的内容的名字
+import {obj as object, str as string} from './a'
+
+//各种类型输出(推荐使用)
+export default{}
+let obj={}
+export let boo=true
+...
+export {
+    obj,
+    str,
+    number,
+    testCFunc,
+    num
+}
+//引入各种类型输出
+import cDefault, {obj, testCFunc as func, boo as bo} from './c'
+
+//引入全部
+import * as cModule from './c'
+
+
+
+

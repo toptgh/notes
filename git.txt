@@ -1,0 +1,44 @@
+完整git教程：https://www.liaoxuefeng.com/
+第一次使用git需要设置
+git config --global user.name "名字"
+git config --global user.email "邮箱"
+将内容合并以下：
+$ git pull --rebase origin master
+ 
+拉取远程代码：git pull origin master
+ 克隆本地：git clone https://github.com/toptgh/easyshop.git（仓库地址）
+创建本地仓库：git init
+本地仓库与远程仓库关联： git remote add origin 仓库地址
+添加到本地仓库： git add 文件名称 || git add .所有文件
+真正把文件提交到仓库 ：git commit -m "init"（备注）
+查看状态： git status
+提交到远程仓库：git push origin master（分支名字）
+查看提交文件修改内容：git diff 文件名称
+查看历史：git log --pretty=oneline
+历史回退：git reset --hard HEAD^
+查看所有操作记录：git reflog
+根据操作记录回退：git reset --hard 版本号
+创建分支：git branch 分支名称
+切换分支：git checkout 分支名称 //-b 即创建又切换分支
+git checkout -- readme.txt意思就是，把readme.txt文件在工作区的修改全部撤销
+创建文件夹：mkdir
+创建文件：touch
+查看当前文件路径：pwd
+查看当前文件夹所有的东西：1s
+查看文件内容：cat 文件名称
+获取秘钥 ssk-keygen -t rsa -C <邮箱名称>
+查看秘钥：cat ~ssh/id_rsa.pub
+合并分支：git merge 分支名称
+
+通过git操作github上的项目：
+   1.在github上创建一个项目仓库
+   2.在本地通过git克隆一个github仓库
+      命令：git clone 仓库地址
+   3.把要上传的项目添加到目录中
+   4.git add .把项目添加到git中管理
+   5.git commit -m"添加了一个项目",提交到git服务器
+   6.git push -v origin master 在主分支master上以流的方式向github推送。
+   7.输入github的用户名和密码
+   8.如果在线上修改了项目，线下同步线上：
+      命令：git pull origin master
+      或：新建一文件夹用git clone命令重新克隆一个

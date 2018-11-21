@@ -1,0 +1,153 @@
+全局安装脚手架工具
+npm install create-react-app -g
+创建react项目
+create-react-app <项目名字> 
+
+在react项目的入口文件中，React引入在前，ReactDOM引入再后
+
+vue渲染方式是替换DOM结构，react渲染方式是插入DOM结构
+ 
+react渲染函数
+ReactDOM.render(
+<h1></h1>,	//参数一：需要渲染的dom结构
+document.getElementById('root'),	//渲染在那个节点上
+()=>{}	//参数三：渲染完成的回调函数
+}
+
+// jsx语法：在js文件中，写html元素当成对象使用。
+
+// 1.html标签字母小写。
+// 2.标签需要使用根节点包裹（或者使用数组）
+// 3.在标签中，如果需要绑定表达式，就需要使用{}解析  
+
+react一切都是对象
+
+在标签里写属性等，需要写成JS写属性的形式
+class=>className
+
+//第一个大括号解析表达式，第二个是对象
+//如果是margin-top横杠的，需要加引号"margin-top"
+style=><div style={{background:'red'}}></div>
+
+v-bind+v-text 相当于 :
+let dom=<div title={msg}>{msg}</div>
+
+v-if 相当于:
+let bool=false;
+let dom=bool?<div></div>:null;
+let dom=bool&&<div></div>
+
+v-show相当于：
+let show=true;
+let dom=<div style={{display:show?'':'none'}}></div>
+
+v-on相当于：
+let fn=(ev)=>{} //参数ev：事件对象
+let dom=<div onClick={fn}></div>
+
+v-for相当于：
+遍历数组：
+推荐方法一：
+let list2= <ul>
+    {
+        arr.map((item, index)=>{
+            return <li key={index}>{item}</li>;
+        })
+    }
+</ul>;
+
+方法二：
+let list3= <ul>
+    {
+        (function(){
+            let newData = [];
+            for(let i = 0; i < arr.length; i++){
+                newData.push(<li key={i}>{arr[i]}</li>);
+            }
+            return newData;
+        })()
+    }
+</ul>;
+
+遍历对象：
+Object.keys(obj).map((k,index)=>{
+return(
+<li key={index}>
+key:{k},
+value:{obj[k]}
+</li>	
+)
+})
+
+组件：在react中是一个类，需要继承react的component类型
+react组件没有全局组件和局部组件，哪里需要哪里引用
+组件名字首字母大写
+组件不用声明，直接当标签使用
+
+//构造函数
+constructor(){
+super();
+//设置组件内部属性，为一个对象
+//修改使用setState()
+this.state={
+//配置属性值
+}
+}
+
+//声明组件的dom结构
+render(){
+let{title,list}=this.state //可直接使用属性，而不用this.state
+return(
+//this指向组件标签
+)
+}
+
+外面this为undefined(因为是模块化开发，改变了本来指向window,)
+this指向组件标签:
+点击事件箭头函数：onClick={()=>{}} 
+点击事件普通函数：onClick={this.Action.bind(this,item)}
+Action(item,ev){}
+
+箭头函数是匿名函数，不能作为构造函数，不能使用new
+箭头函数不绑定arguments，取而代之用rest参数...解决
+箭头函数不绑定this，会捕获其所在的上下文的this值，作为自己的this值
+箭头函数没有原型属性
+
+事件：react数据单项绑定，数据到dom，dom变化不能传到数据
+实现数据双向绑定：input框为onChange={this.action.bind(this)}
+action(ev){
+this.setState({value:ev.target.value})
+}
+input框为onChange 
+点击框为onClick
+
+
+修改State数据
+修改数据是异步的
+参数一：为对象需要修改的state
+参数二：修改完成，并且dom结构重新渲染后，执行的回调
+this.setState({
+msg:'hello'
+},()=>{
+
+})
+
+
+父子组件传值
+父传子：父在子标签上绑定自定义属性title='a'，子：this.props.title
+
+子传父：
+父在子标签绑定自定义事件：
+text={this.action.bind(this)}
+action(value){
+
+}
+子标签触发事件:
+action(){
+this.props.text(this.state.value)
+}
+
+
+
+
+
